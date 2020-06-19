@@ -3,6 +3,7 @@ from django.http import HttpResponse, HttpResponseBadRequest
 from django.views.decorators.csrf import csrf_exempt
 import json
 from .models import User, Message
+from datetime import datetime
 
 # Create your views here.
 @csrf_exempt
@@ -31,6 +32,7 @@ def webhook_message(request):
       message_text  = json_dict['message'].get('text')
       message_date  = json_dict['message'].get('date')
     except KeyError:
+      breakpoint()
       return None
     if None in (sender_id, update_id, message_text, message_date):
       return None
@@ -48,6 +50,6 @@ def webhook_message(request):
           ).save()
           return True
       except (KeyError, ValueError):
-          return None
+        return None
     else:
       raise ValueError('Sender is rejected')
