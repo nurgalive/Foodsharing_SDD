@@ -1,0 +1,19 @@
+{
+  "message": {
+    "chat": {
+        "first_name": "Innokentiy",
+        "id": 123456788,
+        "last_name": "Putin",
+        "type": "private"
+      },
+      "date": 1533248578,
+      "from": {
+          "first_name": "Innokentiy",
+                    "id": 123456788,
+                    "is_bot": false,
+                    "language_code": "en",
+                    "last_name": "Putin"},
+           "message_id": 5,
+           "text": "Hi man! How are you!"},
+  "update_id": 941430906
+}
