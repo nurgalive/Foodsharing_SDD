@@ -4,9 +4,6 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 from .models import User, Message
 
-from telegram.ext import Updater
-
-
 # Create your views here.
 @csrf_exempt
 def webhook_message(request):
