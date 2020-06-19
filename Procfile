@@ -1,0 +1,1 @@
+web: gunicorn edudam.wsgi --log-file -
