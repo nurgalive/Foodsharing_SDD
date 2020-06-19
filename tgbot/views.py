@@ -32,24 +32,36 @@ def webhook_message(request):
       message_text  = json_dict['message'].get('text')
       message_date  = json_dict['message'].get('date')
     except KeyError:
-      breakpoint()
       return None
     if None in (sender_id, update_id, message_text, message_date):
       return None
 
     if _update_id_exists(update_id):
+      breakpoint()
+
       return True
 
     if _is_user_registered(sender_id):
       try:
-          Message(
-              update_id=int(update_id),
-              text=str(message_text),
-              sender=sender_object,
-              date=datetime.fromtimestamp(int(message_date)),
-          ).save()
-          return True
+        Message(
+          update_id=int(update_id),
+          text=str(message_text),
+          sender=sender_object,
+          date=datetime.fromtimestamp(int(message_date)),
+        ).save()
+        return True
       except (KeyError, ValueError):
+        breakpoint()
+
         return None
     else:
       raise ValueError('Sender is rejected')
+
+  try:
+    result = _add_message_to_db(json_message)
+  except ValueError as e:
+    return HttpResponseBadRequest(str(e))
+  if result is True:
+    return HttpResponse('OK')
+  else:
+    return HttpResponseBadRequest('Malformed or incomplete JSON data received')
