@@ -54,7 +54,7 @@ class Bot:
     self.dispatcher.add_handler(conv_handler)
     self.dispatcher.add_error_handler(self.error_handler)
 
-  def error_handler(update: Update, context: CallbackContext):
+  def error_handler(self, update: Update, context: CallbackContext):
     print('Error!', context.error)
 
   def start(self, update, context):
