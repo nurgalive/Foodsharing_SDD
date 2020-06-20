@@ -123,7 +123,7 @@ class Bot:
           states={
               GENDER: [MessageHandler(Filters.regex('^(Boy|Girl|Other)$'), gender)],
 
-              PHOTO: [MessageHandler(Filters.photo),
+              PHOTO: [MessageHandler(Filters.photo, photo),
                       CommandHandler('skip', skip_photo)],
 
               # LOCATION: [MessageHandler(Filters.location, location(update_obj, self.bot)),
