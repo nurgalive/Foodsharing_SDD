@@ -91,6 +91,9 @@ class Bot:
   def categories(self, update: Update, context: CallbackContext):
     category = self.update_obj.message.text
 
+    user = self.update_obj.message.from_user
+    user_db = User.objects.filter(user_id__exact=str(user.id))
+
     if show_more_text in category:
       _, parsed_offset = category.split('_')
       offset = int(parsed_offset)
@@ -113,7 +116,7 @@ class Bot:
       'Мы отфильтруем по выбранным категориям: ' + category,
       reply_markup=ReplyKeyboardRemove())
 
-    posts = Post.objects.all() 
+    posts = Post.objects.filter(city__exact=user_db.city)
 
     for post in posts:
       info = ''
