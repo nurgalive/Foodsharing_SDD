@@ -18,7 +18,7 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 
 logger = logging.getLogger(__name__)
 
-CATEGORIES = range(1)
+CATEGORIES, CITIES = range(2)
 
 class Bot:
   def __init__(self, token, url='edudam.herokuapp.com'):
@@ -77,8 +77,7 @@ class Bot:
   def categories(self, update, context):
     user = self.update_obj.message.from_user
     self.update_obj.message.reply_text(
-      'Мы отфильтруем по выбранным категориям: ' + self.update_obj.message.text,
-      reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True))
+      'Мы отфильтруем по выбранным категориям: ' + self.update_obj.message.text)
 
     return ConversationHandler.END
 
