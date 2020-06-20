@@ -156,3 +156,31 @@ def webhook(request, token):
     
   else:
     return HttpResponseBadRequest('Malformed or incomplete JSON data received')
+
+def analytic(request):
+  posts = Post.objects.all()
+  category_stats = {}
+
+  for post in posts:
+    if category_stats[post.category]:
+      category_stats[post.category] += 1
+    else:
+      category_stats[post.category] = 1
+
+  post_from_moscow = Post.objects.filter(city__exact='Москва').count()
+  post_from_spb = Post.objects.filter(city__exact='Санкт-Петербург').count()
+  post_from_nowhere = Post.objects.filter(city__exact='Неизвестно').count()
+
+  post_without_category = Post.objects.filter(category__exact='unknow').count()
+  booked_postst = Post.objects.filter(category__exact='unknow').count()
+  lost_posts = Post.objects.filter(category__exact='unknow').count()
+
+  return render(request, 'tgbot/analytic.html', {
+    'category_stats': category_stats,
+    'post_from_moscow': post_from_moscow,
+    'post_from_spb': post_from_spb,
+    'post_from_nowhere': post_from_nowhere,
+    'post_without_category': post_without_category,
+    'booked_postst': booked_postst,
+    'lost_posts': lost_posts,
+  })

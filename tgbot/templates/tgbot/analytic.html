@@ -1,0 +1,27 @@
+{% extends 'tgbot/base.html' %}
+
+{% block content %}
+{% for cat in category_stats %}
+    <div>
+        <h3>Разбивка по категориям</h3>
+        <p>Категория: {{ cat }}, количество: {{ category_stats[cat] }}</p>
+    </div>
+{% endfor %}
+<p>Постов в Москве: {{ post_from_moscow }}</p>
+<p>Постов в Санкт-Петербурге: {{ post_from_spb }}</p>
+<p>Постов в Неизвестном городе: {{ post_from_nowhere}}</p>
+
+<p>Постов без категории: {{ post_without_category }}</p>
+<p>Постов с бронью: {{ booked_postst }}</p>
+<p>Постов, еду из которых уже забрали: {{ lost_posts }}</p>
+
+<script>
+    category_stats = JSON.parse({{ category_stats }})
+    post_from_moscow = {{ post_from_moscow }}
+    post_from_spb = {{ post_from_spb }}
+    post_from_nowhere = {{ post_from_nowhere }}
+    post_without_category = {{ post_without_category }}
+    booked_postst = {{ booked_postst }}
+    lost_posts = {{ lost_posts }}
+</script>
+{% endblock %}
