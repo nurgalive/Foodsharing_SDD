@@ -27,7 +27,7 @@ class Bot:
       update_obj = Update.de_json(update, self.bot)
       self.dispatcher.process_update(update_obj)
       
-      chat_id = update_obj.message.chat.id
+      chat_id = str(update_obj.message.chat.id)
 
-      text = update_obj.message.text.encode('utf-8')
+      text = update_obj.message.text
       self.bot.sendMessage(chat_id=chat_id, text=text)
