@@ -63,34 +63,38 @@ def skip_photo(update, context):
     update.message.reply_text('I bet you look great! Now, send me your location please, '
                               'or send /skip.')
 
-    # return 
     return BIO
 
 
-# def location(update, context):
-#     user = update.message.from_user
-#     user_location = update.message.location
-#     logger.info("Location of %s: %f / %f", user.first_name, user_location.latitude,
-#                 user_location.longitude)
-#     update.message.reply_text('Maybe I can visit you sometime! '
-#                               'At last, tell me something about yourself.')
+def location(update, context):
+    user = update.message.from_user
+    user_location = update.message.location
+    logger.info("Location of %s: %f / %f", user.first_name, user_location.latitude,
+                user_location.longitude)
+    update.message.reply_text('Maybe I can visit you sometime! '
+                              'At last, tell me something about yourself.')
 
-#     return BIO
+    return BIO
 
 
-# def skip_location(update, context):
-#     user = update.message.from_user
-#     logger.info("User %s did not send a location.", user.first_name)
-#     update.message.reply_text('You seem a bit paranoid! '
-#                               'At last, tell me something about yourself.')
+def skip_location(update, context):
+    user = update.message.from_user
+    logger.info("User %s did not send a location.", user.first_name)
+    update.message.reply_text('You seem a bit paranoid! '
+                              'At last, tell me something about yourself.')
 
-#     return BIO
+    return BIO
 
 
 def bio(update, context):
     user = update.message.from_user
     logger.info("Bio of %s: %s", user.first_name, update.message.text)
     update.message.reply_text('Thank you! I hope we can talk again some day.')
+
+    posts = Post.objects.all()
+    for post in posts:
+        update.message.reply_text(post.text)
+    
 
     return ConversationHandler.END
 
@@ -118,26 +122,6 @@ class Bot:
 
       self.dispatcher = Dispatcher(self.bot, None, workers=0)
       
-      # Add conversation handler with the states GENDER, PHOTO, LOCATION and BIO
-      # conv_handler = ConversationHandler(
-      #     entry_points=[CommandHandler('start', start)],
-
-      #     states={
-      #         GENDER: [MessageHandler(Filters.regex('^(Boy|Girl|Other)$'), gender)],
-
-      #         PHOTO: [MessageHandler(Filters.photo, photo),
-      #                 CommandHandler('skip', skip_photo)],
-
-      #         # LOCATION: [MessageHandler(Filters.location, location(update_obj, self.bot)),
-      #         #           CommandHandler('skip', skip_location(update_obj, self.bot))],
-
-      #         BIO: [MessageHandler(Filters.text, bio)]
-      #     },
-
-      #     fallbacks=[CommandHandler('cancel', cancel)]
-      # )
-
-      # self.dispatcher.add_handler(conv_handler)
 
     def register(self, handler):
       handler.register(self.dispatcher)
@@ -146,9 +130,24 @@ class Bot:
       update_obj = Update.de_json(update, self.bot)
 
       self.dispatcher.process_update(update_obj)
-      
-      posts = Post.objects.all()
 
-      for post in posts:
-        update_obj.message.reply_text(post.text)
-      
+      # Add conversation handler with the states GENDER, PHOTO, LOCATION and BIO
+      conv_handler = ConversationHandler(
+          entry_points=[CommandHandler('start', start(update_obj, self.bot))],
+
+          states={
+              GENDER: [MessageHandler(Filters.regex('^(Boy|Girl|Other)$'), gender(update_obj, self.bot))],
+
+              PHOTO: [MessageHandler(Filters.photo, photo(update_obj, self.bot)),
+                      CommandHandler('skip', skip_photo(update_obj, self.bot))],
+
+              LOCATION: [MessageHandler(Filters.location, location(update_obj, self.bot(update_obj, self.bot))),
+                        CommandHandler('skip', skip_location(update_obj, self.bot(update_obj, self.bot)))],
+
+              BIO: [MessageHandler(Filters.text, bio)]
+          },
+
+          fallbacks=[CommandHandler('cancel', cancel)]
+      )
+
+      self.dispatcher.add_handler(conv_handler)
