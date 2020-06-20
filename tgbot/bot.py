@@ -134,27 +134,6 @@ class Bot:
       'Мы отфильтруем по выбранным категориям: ' + category,
       reply_markup=ReplyKeyboardRemove())
 
-    user_db = user_db_filter.get()
-    posts = Post.objects.filter(city__exact=user_db.city)
-
-    for post in posts:
-      info = ''
-      if post.city is not None:
-        info = info + 'Город: ' + post.city + '\n'
-      else:
-        continue
-
-      if post.metro != 'unknown':
-        info = info + 'Метро: ' + post.metro + '\n'
-
-      if post.address is not None:
-        info = info + 'Адрес: ' + post.address + '\n'
-
-      self.update_obj.message.reply_text(
-        '' + info + '\n\n'
-        'Ссылка на пост: ' + post.link + ''
-      )
-
     return ConversationHandler.END
 
   def cancel(self, update, context):
@@ -172,15 +151,15 @@ class Bot:
 
     for post in posts:
       info = ''
-      if post.city is not None:
+      if not post.city:
         info = info + 'Город: ' + post.city + '\n'
       else:
         continue
 
-      if post.metro is not 'unknown':
+      if post.metro != 'unknown':
         info = info + 'Метро: ' + post.metro + '\n'
 
-      if post.address is not None:
+      if post.address != 'Default address':
         info = info + 'Адрес: ' + post.address + '\n'
 
       self.update_obj.message.reply_text(
