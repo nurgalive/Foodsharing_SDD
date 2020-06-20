@@ -145,9 +145,10 @@ class Bot:
     def webhook(self, update):
       update_obj = Update.de_json(update, self.bot)
 
+      self.dispatcher.process_update(update_obj)
+      
       posts = Post.objects.all()
 
       for post in posts:
         update_obj.message.reply_text(post.text)
       
-      self.dispatcher.process_update(update_obj)

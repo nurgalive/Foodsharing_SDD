@@ -2,10 +2,6 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseBadRequest, Http404
 from django.views.decorators.csrf import csrf_exempt
 import json
-
-from utils.getCategory import get_food_category
-from utils.gitCity import get_city
-from utils.isBooked import is_booked
 from .models import User, Message, Post, Group, Comment
 from datetime import datetime
 import vk_api
@@ -21,9 +17,9 @@ def from_vk_to_db(request):
   login, password = '+4915205901185', '78ododad'
   vk_session = vk_api.VkApi(login, password)
   try:
-    vk_session.auth()
+          vk_session.auth()
   except vk_api.AuthError as error_msg:
-    print(error_msg)
+          print(error_msg)
 
   vk = vk_session.get_api()
 
@@ -56,6 +52,7 @@ def from_vk_to_db(request):
         category=category
       )
       result.save()
+
   return redirect('home')
 
 
@@ -110,16 +107,16 @@ def webhook(request, token):
       except (KeyError, ValueError):
         return None
 
-      try:
-        Message(
-          update_id=int(update_id),
-          text=str(message_text),
-          sender=sender_object,
-          date=datetime.fromtimestamp(int(message_date)),
-        ).save()
-        return True
-      except (KeyError, ValueError):
-        return None
+    try:
+      Message(
+        update_id=int(update_id),
+        text=str(message_text),
+        sender=sender_object,
+        date=datetime.fromtimestamp(int(message_date)),
+      ).save()
+      return True
+    except (KeyError, ValueError):
+      return None
 
   try:
     result = _add_message_to_db(json_message)
