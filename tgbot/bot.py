@@ -122,7 +122,7 @@ class Bot:
       else:
         continue
 
-      if post.metro is not None:
+      if post.metro is not 'unknown':
         info = info + 'Метро: ' + post.metro + '\n'
 
       if post.address is not None:
