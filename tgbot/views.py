@@ -27,7 +27,7 @@ def notify_users(request):
     bot = Bot(token)
     TgbotConfig.registry.add_bot(token, bot)
 
-    print(bot)
+    print(self.bot.send_message(chat_id=42737369, text="Хэй, бро!"))
 
   # def send_message():
   #   self.bot.send_message()

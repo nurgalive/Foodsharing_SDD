@@ -50,6 +50,12 @@ class Bot:
     #  fallbacks=[CommandHandler('cancel', self.cancel)]
     #)
 
+    рудз_handler = ConversationHandler(
+      entry_points=[CommandHandler('help', self.help)],
+      states={},
+      fallbacks=[CommandHandler('cancel', self.cancel)]
+    )
+
     city_handler = ConversationHandler(
       entry_points=[CommandHandler('city', self.set_city)],
       states={},
@@ -68,6 +74,7 @@ class Bot:
       fallbacks=[CommandHandler('cancel', self.cancel)]
     )
 
+    self.dispatcher.add_handler(help)
     self.dispatcher.add_handler(city_handler)
     self.dispatcher.add_handler(set_city_handler)
     self.dispatcher.add_handler(search_handler)
@@ -84,6 +91,16 @@ class Bot:
       'Отправь /cancel чтобы остановить разговор со мной.\n\n'
       'Выбери город',
       reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True))
+
+    return 'set_city'
+
+  def help(self, update, context):
+    self.update_obj.message.reply_text(
+      'Привет! Это бот едудам. Поговори со мной. '
+      'Отправь /cancel чтобы остановить разговор со мной.\n'
+      'Отправь /city чтобы выбрать город.\n'
+      'Отправь /search чтобы искать объявления.\n'
+    )
 
     return 'set_city'
 
