@@ -1,9 +1,9 @@
 from enum import Enum
 
 class City(Enum):
-    MSC = 1
-    SPB = 2
-    UNKNOWN = 3
+    MSC = 'Москва'
+    SPB = 'Санкт-Петербург'
+    UNKNOWN = 'Неизвестно'
 
 city_aliases = {
     City.MSC: ['москва', 'мск', 'moscow', 'msc'],

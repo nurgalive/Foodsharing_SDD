@@ -2,6 +2,10 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseBadRequest, Http404
 from django.views.decorators.csrf import csrf_exempt
 import json
+
+from utils.getCategory import get_food_category
+from utils.gitCity import get_city
+from utils.isBooked import is_booked
 from .models import User, Message, Post, Group, Comment
 from datetime import datetime
 import vk_api
@@ -17,27 +21,41 @@ def from_vk_to_db(request):
   login, password = '+4915205901185', '78ododad'
   vk_session = vk_api.VkApi(login, password)
   try:
-          vk_session.auth()
+    vk_session.auth()
   except vk_api.AuthError as error_msg:
-          print(error_msg)
+    print(error_msg)
 
   vk = vk_session.get_api()
 
 
   for x in range(0,5):
-          post = vk.wall.get(domain="sharingfood", count=5)
-          text = post['items'][x]['text']
-          date = post['items'][x]['date']
-          post_id = post['items'][x]['id']
-          group_id = post['items'][x]['owner_id']
+    post = vk.wall.get(domain="sharingfood", count=5)
+    text = post['items'][x]['text']
+    date = post['items'][x]['date']
+    post_id = post['items'][x]['id']
+    group_id = post['items'][x]['owner_id']
+    city = get_city(text)
+    is_book = is_booked(text)
+    category = get_food_category(text)
 
-          try:
-            Post.objects.get(post_id=post_id)
-          except:
-            group_id = group_id * -1
-            group = Group.objects.get(group_id=group_id)         
-            result = Post.objects.create(post_id=post_id, text=text, posted_date=datetime.fromtimestamp(int(date)), link="https://vk.com/sharingfood?w=wall-"+str(group_id)+"_"+str(post_id)+"%2Fall", group_id=group, city="Default City", address="Default address")
-            result.save()
+
+    try:
+      Post.objects.get(post_id=post_id)
+    except:
+      group_id = group_id * -1
+      group = Group.objects.get(group_id=group_id)
+      result = Post.objects.create(
+        post_id=post_id,
+        text=text,
+        posted_date=datetime.fromtimestamp(int(date)),
+        link="https://vk.com/sharingfood?w=wall-"+str(group_id)+"_"+str(post_id)+"%2Fall",
+        group_id=group,
+        city=city.value,
+        address="Default address",
+        is_book=is_book,
+        category=category
+      )
+    result.save()
   return redirect('home')
 
 
