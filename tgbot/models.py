@@ -25,7 +25,7 @@ class Message(models.Model):
   sender = models.ForeignKey(User, on_delete=models.CASCADE)
 
   def __str__(self):
-      return f'{self.text}'
+    return f'{self.text}'
 
 class Group(models.Model):
   group_id = models.IntegerField(unique=True, primary_key=True)
