@@ -23,11 +23,6 @@ def webhook(request, token):
   except json.decoder.JSONDecodeError as err:
     return HttpResponse(str(err))
 
-  def _is_user_registered(user_id: int) -> bool:
-    if User.objects.filter(user_id__exact=user_id).count() > 0:
-      return True
-    return False
-
   def _update_id_exists(update_id: int) -> bool:
     if Message.objects.filter(update_id__exact=update_id).count() > 0:
       return True
@@ -36,7 +31,6 @@ def webhook(request, token):
   def _add_message_to_db(json_dict: dict) -> (None, True):
     try:
       sender_id     = json_dict['message']['from'].get('id')
-      sender_object = User.objects.filter(user_id__exact=sender_id).get()
       update_id     = json_dict.get('update_id')
       message_text  = json_dict['message'].get('text')
       message_date  = json_dict['message'].get('date')
@@ -48,7 +42,21 @@ def webhook(request, token):
     if _update_id_exists(update_id):
       return True
 
-    if _is_user_registered(sender_id):
+    sender_object = None
+
+    if User.objects.filter(user_id__exact=sender_id).count() > 0:
+      sender_object = User.objects.filter(user_id__exact=sender_id).get()
+    else:
+      try:
+        User(
+          user_id = int(sender_id),
+          first_name=json_dict['message']['from'].get('first_name'),
+          last_name=json_dict['message']['from'].get('last_name'),
+        ).save()
+        sender_object = User.objects.filter(user_id__exact=sender_id).get()
+      except (KeyError, ValueError):
+        return None
+
       try:
         Message(
           update_id=int(update_id),
@@ -59,8 +67,6 @@ def webhook(request, token):
         return True
       except (KeyError, ValueError):
         return None
-    else:
-      raise ValueError('Sender is rejected')
 
   try:
     result = _add_message_to_db(json_message)
@@ -69,7 +75,7 @@ def webhook(request, token):
   if result is True:
     
     if bot is not None:
-      bot.webhook(json.loads(request.body.decode('utf-8')))
+      # bot.webhook(json.loads(request.body.decode('utf-8')))
       return HttpResponse('OK')
     else:
       raise Http404
