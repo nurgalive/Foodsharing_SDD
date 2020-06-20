@@ -121,6 +121,9 @@ class Bot:
     user_db = User.objects.filter(user_id__exact=str(user.id)).get()
     category_db = Category.objects.filter(name__exact=str(category)).get()
     user_categories = UserToCategory.objects.filter(user=user_db, category=category_db)
+    print(category_db.name, user_db.first_name)
+    for t in user_categories:
+      print(t.name)
     
     try:
       if user_categories.count() == 0:
@@ -166,10 +169,14 @@ class Bot:
       filtered_posts = posts
     else:
       for post in posts:
-        print(post.category == categories[0])
         if post.category in categories:
           filtered_posts.append(post)
     print(filtered_posts)
+
+    if len(filtered_posts) == 0:
+      self.update_obj.message.reply_text('Ни одного поста не найдено')
+
+      return ConversationHandler.END
 
     for post in filtered_posts:
       info = ''
