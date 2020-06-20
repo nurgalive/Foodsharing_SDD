@@ -5,24 +5,13 @@ import json
 from .models import User, Message
 from datetime import datetime
 
-import logging
-
-from telegram import (ReplyKeyboardMarkup, ReplyKeyboardRemove)
-from telegram.ext import (Updater, CommandHandler, MessageHandler, Filters,
-                          ConversationHandler)
-
-from queue import Queue  # in python 2 it should be "from Queue"
-from threading import Thread
-
-from telegram import Bot
-from telegram.ext import Dispatcher
 from .bot import Bot
 
 
 # Create your views here.
 @csrf_exempt
-def webhook(request, token):
-    bot = Bot('1264768775:AAHvmoU7AZTvcL4ljxIDD78y048Rs5okQKU', 'localhost:8000')
+def webhook_message(request, token):
+    bot = Bot(token, 'https://edudam.herokuapp.com/')
     if bot is not None:
         bot.webhook(json.loads(request.body.decode('utf-8')))
         return HttpResponse()

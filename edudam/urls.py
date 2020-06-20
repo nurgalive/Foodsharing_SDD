@@ -17,6 +17,6 @@ from django.contrib import admin
 from django.urls import path, include
 
 urlpatterns = [
-    path('', include('tgbot.urls')),
+    path('messages/', include('tgbot.urls')),
     path('admin/', admin.site.urls),
 ]
