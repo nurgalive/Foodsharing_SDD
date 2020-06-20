@@ -112,8 +112,6 @@ class Bot:
       self.dispatcher = Dispatcher(self.bot, None, workers=0)
 
     def register(self, handler):
-      handler.register(self.dispatcher)
-
       # Add conversation handler with the states GENDER, PHOTO, LOCATION and BIO
       conv_handler = ConversationHandler(
           entry_points=[CommandHandler('start', start)],
@@ -134,6 +132,7 @@ class Bot:
       )
 
       self.dispatcher.add_handler(conv_handler)
+      handler.register(self.dispatcher)
 
 
     def webhook(self, update):
