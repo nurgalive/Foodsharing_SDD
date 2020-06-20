@@ -49,7 +49,7 @@ def webhook(request, token):
     else:
       try:
         User(
-          user_id = int(sender_id),
+          user_id = sender_id,
           first_name=json_dict['message']['from'].get('first_name'),
           last_name=json_dict['message']['from'].get('last_name'),
         ).save()
@@ -74,7 +74,7 @@ def webhook(request, token):
     return HttpResponseBadRequest(str(e))
   if result is True:
     if bot is not None:
-      bot.webhook(json.loads(request.body.decode('utf-8')))
+      # bot.webhook(json.loads(request.body.decode('utf-8')))
       return HttpResponse('OK')
     else:
       raise Http404
