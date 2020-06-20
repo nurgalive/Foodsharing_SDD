@@ -43,7 +43,10 @@ def gender(update, context):
 def photo(update, context):
     user = update.message.from_user
     photo_file = update.message.photo[-1].get_file()
-    photo_file.download('user_photo.jpg')
+
+    if photo_file is not None:
+      photo_file.download('user_photo.jpg')
+
     logger.info("Photo of %s: %s", user.first_name, 'user_photo.jpg')
     update.message.reply_text('Gorgeous! Now, send me your location please, '
                               'or send /skip if you don\'t want to.')
@@ -112,6 +115,28 @@ class Bot:
       self.bot.set_webhook('{}/{}/{}/'.format(url, 'bot', token))
 
       self.dispatcher = Dispatcher(self.bot, None, workers=0)
+      
+      # Add conversation handler with the states GENDER, PHOTO, LOCATION and BIO
+      conv_handler = ConversationHandler(
+          entry_points=[CommandHandler('start', start)],
+
+          states={
+              GENDER: [MessageHandler(Filters.regex('^(Boy|Girl|Other)$'), gender)],
+
+              PHOTO: [MessageHandler(Filters.photo),
+                      CommandHandler('skip', skip_photo)],
+
+              # LOCATION: [MessageHandler(Filters.location, location(update_obj, self.bot)),
+              #           CommandHandler('skip', skip_location(update_obj, self.bot))],
+
+              BIO: [MessageHandler(Filters.text, bio)]
+          },
+
+          fallbacks=[CommandHandler('cancel', cancel)]
+      )
+
+      self.dispatcher.add_handler(conv_handler)
+
 
     def register(self, handler):
       handler.register(self.dispatcher)
@@ -119,24 +144,4 @@ class Bot:
     def webhook(self, update):
       update_obj = Update.de_json(update, self.bot)
       
-      # Add conversation handler with the states GENDER, PHOTO, LOCATION and BIO
-      conv_handler = ConversationHandler(
-          entry_points=[CommandHandler('start', start(update_obj, self.bot))],
-
-          states={
-              GENDER: [MessageHandler(Filters.regex('^(Boy|Girl|Other)$'), gender(update_obj, self.bot))],
-
-              PHOTO: [MessageHandler(Filters.photo, photo(update_obj, self.bot)),
-                      CommandHandler('skip', skip_photo(update_obj, self.bot))],
-
-              # LOCATION: [MessageHandler(Filters.location, location(update_obj, self.bot)),
-              #           CommandHandler('skip', skip_location(update_obj, self.bot))],
-
-              BIO: [MessageHandler(Filters.text, bio(update_obj, self.bot))]
-          },
-
-          fallbacks=[CommandHandler('cancel', cancel)]
-      )
-
-      self.dispatcher.add_handler(conv_handler)
       self.dispatcher.process_update(update_obj)
