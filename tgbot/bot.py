@@ -9,6 +9,7 @@ from telegram import (ReplyKeyboardMarkup, ReplyKeyboardRemove)
 from telegram.ext import (Updater, CommandHandler, MessageHandler, Filters,
                           ConversationHandler)
 
+from utils.getCategory import all_cats
 from .models import Post, User
 
 
@@ -37,7 +38,7 @@ class Bot:
       entry_points=[CommandHandler('start', self.start)],
 
       states={
-        CITIES:     [MessageHandler(Filters.regex('^(Москва|Спб)$'), self.cities)],
+        CITIES:     [MessageHandler(Filters.regex('^(Москва|Санкт-Петербург)$'), self.cities)],
         CATEGORIES: [MessageHandler(Filters.regex('^(Все|Молоко|Хлеб)$'), self.categories)],
       },
 
@@ -48,7 +49,7 @@ class Bot:
 
 
   def start(self, update, context):
-    reply_keyboard = [['Москва', 'Спб']]
+    reply_keyboard = [['Москва', 'Санкт-Петербург']]
 
     self.update_obj.message.reply_text(
       'Привет! Это бот едудам. Поговори со мной. '
@@ -60,7 +61,7 @@ class Bot:
 
   def cities(self, update, context):
     user = self.update_obj.message.from_user
-    reply_keyboard = [['Все', 'Молоко', 'Хлеб']]
+    reply_keyboard = [['Все', *all_cats.keys()]]
 
     selected_city = self.update_obj.message.text
     user_db = User.objects.filter(user_id__exact=str(user.id))
