@@ -15,4 +15,4 @@ class TgbotConfig(AppConfig):
     registry = None
 
     def ready(self):
-        BotConfig.registry = BotRegistry()
+        TgbotConfig.registry = BotRegistry()
