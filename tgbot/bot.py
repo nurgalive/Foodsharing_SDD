@@ -113,11 +113,21 @@ class Bot:
       'Мы отфильтруем по выбранным категориям: ' + category,
       reply_markup=ReplyKeyboardRemove())
 
-    posts = Post.objects.all()
+    posts = Post.objects.all() 
 
     for post in posts:
+      info = ''
+      if post.city is not None:
+        info = info + 'Город: ' + post.city + '\n'
+
+      if post.metro is not None:
+        info = info + 'Метро: ' + post.metro + '\n'
+
+      if post.address is not None:
+        info = info + 'Адрес: ' + post.metro + '\n'
+
       self.update_obj.message.reply_text(
-        post.text + '\n\n'
+        '' + info + '\n\n'
         'Ссылка на пост: ' + post.link + ''
       )
 
