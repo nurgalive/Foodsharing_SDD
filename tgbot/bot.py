@@ -68,7 +68,7 @@ class Bot:
 
     self.update_obj.message.reply_text(
       'Твой город: ' + self.update_obj.message.text + '\n\n'
-      'Выбери интересующие категории продуктов ' + ,
+      'Выбери интересующие категории продуктов ',
       reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True))
 
     return ConversationHandler.END
