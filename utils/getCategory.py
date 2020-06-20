@@ -84,7 +84,7 @@ def get_food_category(text):
 
   if (
       (category_with_max_match != second_category_with_max_match) &
-      (category_with_max_match_count - second_category_with_max_match_count > 10)
+      (category_with_max_match_count - second_category_with_max_match_count > 3)
   ):
     return category_with_max_match
   elif second_category_with_max_match_count == 0:
