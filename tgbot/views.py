@@ -29,12 +29,12 @@ def notify_users(request):
 
     #print(self.bot.send_message(chat_id=42737369, text="Хэй, бро!"))
 
-  message = "Хэй, бро!"
+  #message = "Хэй, бро!"
   def send_message(self, message):
     self.bot.send_message(chat_id=42737369, text=message)
     self.bot.send_message(chat_id=217254731, text=message)
 
-    send_message(bot, message)
+  send_message(bot, "Хэй, бро!")
 
   #bot.send_message(chat_id=42737369, text="Хэй, бро!")
   #bot.send_message(chat_id=217254731, text="Хэй, бро!")

@@ -115,9 +115,10 @@ class Bot:
 
     self.update_obj.message.reply_text(
       'Выбери город',
-      reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True))
+      reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True)
+    )
 
-    return CITIES
+    return 'set_city'
 
   def cities(self, update, context):
     user = self.update_obj.message.from_user
