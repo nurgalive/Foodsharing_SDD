@@ -157,6 +157,7 @@ class Bot:
     user = self.update_obj.message.from_user
     user_db = User.objects.filter(user_id__exact=str(user.id)).get()
     user_categories = UserToCategory.objects.filter(user=user_db)
+    print(user_categories)
     categories_db = Category.objects.filter(id=user_categories.category)
     categories = map(lambda cat: cat.name, categories_db)
 
