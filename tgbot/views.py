@@ -28,7 +28,6 @@ def from_vk_to_db(request):
 
   vk = vk_session.get_api()
 
-
   for x in range(0,5):
     post = vk.wall.get(domain="sharingfood", count=5)
     text = post['items'][x]['text']
@@ -60,10 +59,6 @@ def from_vk_to_db(request):
       result.save()
 
   return redirect('home')
-
-
-
-
 
 @csrf_exempt
 def webhook(request, token):

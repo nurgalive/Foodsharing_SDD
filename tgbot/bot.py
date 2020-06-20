@@ -42,7 +42,7 @@ class Bot:
         entry_points=[CommandHandler('start', self.start)],
 
         states={
-          CATEGORIES: [MessageHandler(Filters.regex('^(Boy|Girl|Other)$'), self.categories)],
+          CATEGORIES: [MessageHandler(Filters.regex('^(Москва|Cпб)$'), self.categories)],
         },
 
         fallbacks=[CommandHandler('cancel', self.cancel)]
@@ -64,7 +64,7 @@ class Bot:
 
 
   def categories(self, update, context):
-    reply_keyboard = [['Все', 'Молоко', "Хлеб"]]
+    reply_keyboard = [['Все', 'Молоко', 'Хлеб']]
     user = self.update_obj.message.from_user
 
     self.update_obj.message.reply_text(
