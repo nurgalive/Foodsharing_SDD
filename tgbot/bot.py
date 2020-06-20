@@ -48,7 +48,7 @@ def photo(update, context):
     update.message.reply_text('Gorgeous! Now, send me your location please, '
                               'or send /skip if you don\'t want to.')
 
-    return LOCATION
+    return BIO
 
 
 def skip_photo(update, context):
@@ -57,27 +57,28 @@ def skip_photo(update, context):
     update.message.reply_text('I bet you look great! Now, send me your location please, '
                               'or send /skip.')
 
-    return LOCATION
-
-
-def location(update, context):
-    user = update.message.from_user
-    user_location = update.message.location
-    logger.info("Location of %s: %f / %f", user.first_name, user_location.latitude,
-                user_location.longitude)
-    update.message.reply_text('Maybe I can visit you sometime! '
-                              'At last, tell me something about yourself.')
-
+    # return 
     return BIO
 
 
-def skip_location(update, context):
-    user = update.message.from_user
-    logger.info("User %s did not send a location.", user.first_name)
-    update.message.reply_text('You seem a bit paranoid! '
-                              'At last, tell me something about yourself.')
+# def location(update, context):
+#     user = update.message.from_user
+#     user_location = update.message.location
+#     logger.info("Location of %s: %f / %f", user.first_name, user_location.latitude,
+#                 user_location.longitude)
+#     update.message.reply_text('Maybe I can visit you sometime! '
+#                               'At last, tell me something about yourself.')
 
-    return BIO
+#     return BIO
+
+
+# def skip_location(update, context):
+#     user = update.message.from_user
+#     logger.info("User %s did not send a location.", user.first_name)
+#     update.message.reply_text('You seem a bit paranoid! '
+#                               'At last, tell me something about yourself.')
+
+#     return BIO
 
 
 def bio(update, context):
@@ -129,8 +130,8 @@ class Bot:
               PHOTO: [MessageHandler(Filters.photo, photo),
                       CommandHandler('skip', skip_photo(update_obj, self.bot))],
 
-              LOCATION: [MessageHandler(Filters.location, location(update_obj, self.bot)),
-                        CommandHandler('skip', skip_location(update_obj, self.bot))],
+              # LOCATION: [MessageHandler(Filters.location, location(update_obj, self.bot)),
+              #           CommandHandler('skip', skip_location(update_obj, self.bot))],
 
               BIO: [MessageHandler(Filters.text, bio(update_obj, self.bot))]
           },
