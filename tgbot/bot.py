@@ -75,15 +75,15 @@ class Bot:
 
 
   def categories(self, update, context):
-    self.update_obj.message.reply_text('Мы отфильтруем по выбранным категориям: ' + self.update_obj.message.text)
+    self.update_obj.message.reply_text('Мы отфильтруем по выбранным категориям: ' + self.update_obj.message.text,
+      reply_markup=ReplyKeyboardRemove())
 
     return ConversationHandler.END
 
-
   def cancel(self, update, context):
     user = self.update_obj.message.from_user
-    logger.info("User %s canceled the conversation.", user.first_name)
-    self.update_obj.message.reply_text('Bye! I hope we can talk again some day.',
+    logger.info("Ты %s отменил общение.", user.first_name)
+    self.update_obj.message.reply_text('До встречи!',
                               reply_markup=ReplyKeyboardRemove())
 
     return ConversationHandler.END
