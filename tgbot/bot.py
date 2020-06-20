@@ -106,6 +106,14 @@ class Bot:
       'Мы отфильтруем по выбранным категориям: ' + category,
       reply_markup=ReplyKeyboardRemove())
 
+    posts = Post.objects.all()
+
+    for post in posts:
+      self.update_obj.message.reply_text(
+        post.text + '\n\n'
+        'Ссылка на пост: ' + post.link + ''
+      )
+
     return ConversationHandler.END
 
   def cancel(self, update, context):
