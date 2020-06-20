@@ -138,6 +138,7 @@ class Bot:
       self.dispatcher.add_handler(conv_handler)
 
       self.updater.start_polling()
+      self.updater.idle()
 
     # def register(self, handler):
     #   handler.register(self.dispatcher)

@@ -5,22 +5,22 @@ import json
 from .models import User, Message
 from datetime import datetime
 
-from .apps import TgbotConfig
-from .bot import Bot
+# from .apps import TgbotConfig
+# from .bot import Bot
 
-Create your views here.
-@csrf_exempt
-def webhook(request, token):
-    bot = TgbotConfig.registry.get_bot(token)
-    if bot is None:
-      bot = Bot(token)
-      TgbotConfig.registry.add_bot(token, bot)
+# # Create your views here.
+# @csrf_exempt
+# def webhook(request, token):
+#     bot = TgbotConfig.registry.get_bot(token)
+#     if bot is None:
+#       bot = Bot(token)
+#       TgbotConfig.registry.add_bot(token, bot)
     
-    if bot is not None:
-        # bot.webhook(json.loads(request.body.decode('utf-8')))
-        return HttpResponse()
-    else:
-        raise Http404
+#     if bot is not None:
+#         # bot.webhook(json.loads(request.body.decode('utf-8')))
+#         return HttpResponse()
+#     else:
+#         raise Http404
 
   # # please insert magic here
   # try:
