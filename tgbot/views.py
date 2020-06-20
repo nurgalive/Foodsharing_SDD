@@ -45,6 +45,25 @@ def from_vk_to_db(request):
     except:
       group_id = group_id * -1
       group = Group.objects.get(group_id=group_id)
+
+      comments = vk.wall.getComments(owner_id=group_id, post_id=post_id, count=100, sort='asc')
+
+      count = comments['current_level_count']
+      big_comment = ""
+      for x in range(0,count):
+        try:
+          comments['items'][x]['deleted'] == True
+          continue
+        except:
+          text = comments['items'][x]['text']
+          #print(text)
+          big_comment = big_comment + text + " "
+
+      # last comment id
+      last_comment_id = comments['items'][count-1]['id']
+      # resulted comment
+      #print(big_comment)
+
       result = Post.objects.create(
         post_id=post_id,
         text=text,
