@@ -10,8 +10,8 @@ from .bot import Bot
 
 # Create your views here.
 @csrf_exempt
-def webhook_message(request, token):
-    bot = Bot(token, 'https://edudam.herokuapp.com/')
+def webhook(request, token):
+    bot = Bot(token, 'edudam.herokuapp.com')
     if bot is not None:
         bot.webhook(json.loads(request.body.decode('utf-8')))
         return HttpResponse()

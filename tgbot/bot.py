@@ -107,7 +107,7 @@ class Bot:
 
       #     self.updater.start_polling()
       # else:
-      self.bot.set_webhook('{}/{}/{}/'.format(url, 'messages/webhook', token))
+      self.bot.set_webhook('{}/{}/{}/'.format(url, 'bot', token))
 
       self.dispatcher = Dispatcher(self.bot, None, workers=0)
       conv_handler = ConversationHandler(
