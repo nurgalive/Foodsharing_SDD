@@ -11,7 +11,7 @@ from telegram.ext import (Updater, CommandHandler, MessageHandler, Filters,
                           ConversationHandler)
 
 from utils.getCategory import all_cats
-from .models import Post, User
+from .models import Post, User, Category, UserToCategory
 
 
 # Enable logging
@@ -99,9 +99,6 @@ class Bot:
   def categories(self, update: Update, context: CallbackContext):
     category = self.update_obj.message.text
 
-    user = self.update_obj.message.from_user
-    user_db = User.objects.filter(user_id__exact=str(user.id)).get()
-
     if show_more_text in category:
       _, parsed_offset = category.split('_')
       offset = int(parsed_offset)
@@ -120,10 +117,24 @@ class Bot:
 
       return CATEGORIES
 
+    user = self.update_obj.message.from_user
+    user_db_filter = User.objects.filter(user_id__exact=str(user.id))
+
+    category_db = Category.objects.filter(name__exact=str(category)).get()
+    
+    try:
+      UserToCategory(
+        user=user_db_filter.get(),
+        category=category_db
+      ).save()
+    except (KeyError, ValueError):
+      return None
+
     self.update_obj.message.reply_text(
       'Мы отфильтруем по выбранным категориям: ' + category,
       reply_markup=ReplyKeyboardRemove())
 
+    user_db = user_db_filter.get()
     posts = Post.objects.filter(city__exact=user_db.city)
 
     for post in posts:
@@ -133,7 +144,7 @@ class Bot:
       else:
         continue
 
-      if post.metro is not 'unknown':
+      if post.metro != 'unknown':
         info = info + 'Метро: ' + post.metro + '\n'
 
       if post.address is not None:
