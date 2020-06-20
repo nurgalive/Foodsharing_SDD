@@ -42,7 +42,8 @@ class Bot:
         entry_points=[CommandHandler('start', self.start)],
 
         states={
-          CATEGORIES: [MessageHandler(Filters.regex('^(Москва|Cпб)$'), self.categories)],
+          CITIES:     [MessageHandler(Filters.regex('^(Москва|Cпб)$'), self.categories]
+          CATEGORIES: [MessageHandler(Filters.regex('^(Все|Молоко|Хлеб)$'), self.categories)],
         },
 
         fallbacks=[CommandHandler('cancel', self.cancel)]
@@ -60,15 +61,23 @@ class Bot:
       'Выбери город',
       reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True))
 
-    return CATEGORIES
+    return CITIES
+
+  def cities(self, update, context):
+    reply_keyboard = [['Все', 'Молоко', 'Хлеб']]
+
+    self.update_obj.message.reply_text(
+      'Твой город: ' + self.update_obj.message.text + '\n\n'
+      'Выбери интересующие категории продуктов ' + ,
+      reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True))
+
+    return ConversationHandler.END
 
 
   def categories(self, update, context):
-    reply_keyboard = [['Все', 'Молоко', 'Хлеб']]
     user = self.update_obj.message.from_user
-
     self.update_obj.message.reply_text(
-      'Выбери интересующие категории продуктов',
+      'Мы отфильтруем по выбранным категориям: ' + self.update_obj.message.text,
       reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True))
 
     return ConversationHandler.END
