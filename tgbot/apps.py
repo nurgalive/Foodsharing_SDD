@@ -13,7 +13,7 @@ from .bot import Bot
 
 class TgbotConfig(AppConfig):
     name = 'tgbot'
-    registry = None
+    bot = None
 
     def ready(self):
-      Bot('1264768775:AAHvmoU7AZTvcL4ljxIDD78y048Rs5okQKU')
+      self.bot = Bot('1264768775:AAHvmoU7AZTvcL4ljxIDD78y048Rs5okQKU')
