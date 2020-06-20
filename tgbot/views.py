@@ -55,7 +55,7 @@ def from_vk_to_db(request):
         is_book=is_book,
         category=category
       )
-    result.save()
+      result.save()
   return redirect('home')
 
 
