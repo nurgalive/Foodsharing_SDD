@@ -33,6 +33,8 @@ class Post(models.Model):
   group_id = models.ForeignKey(Group, on_delete=models.CASCADE, related_name="group", default=0)
   city = models.TextField(max_length=32, blank=True, null=True)
   address = models.TextField(max_length=4096, blank=True, null=True)
+  category = models.TextField(max_length=64, blank=True, null=True)
+  is_book = models.BooleanField(default=False)
 
 
 class Comment(models.Model):
