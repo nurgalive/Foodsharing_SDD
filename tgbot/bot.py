@@ -63,10 +63,12 @@ class Bot:
     reply_keyboard = [['Все', 'Молоко', 'Хлеб']]
 
     selected_city = self.update_obj.message.text
-    user_db = User.objects.filter(user_id__exact=str(user.id)).get()
-    user_db.update(
-      city=selected_city
-    )
+    user_db = User.objects.filter(user_id__exact=str(user.id))
+
+    if user_db is not None:
+      user_db.update(
+        city=selected_city
+      )
 
     self.update_obj.message.reply_text(
       'Твой город: ' + selected_city + '\n\n'
