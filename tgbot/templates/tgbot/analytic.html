@@ -1,27 +1,90 @@
 {% extends 'tgbot/base.html' %}
 
 {% block content %}
+<h3>Разбивка по категориям</h3>
 {% for cat in category_stats %}
-    <div>
-        <h3>Разбивка по категориям</h3>
-        <p>Категория: {{ cat }}, количество: {{ category_stats[cat] }}</p>
-    </div>
+    <p>Категория: {{ cat.cat }}, количество: {{ cat.val }}</p>
 {% endfor %}
+<div id="cat"></div>
+<h3>Разбивка по городам</h3>
 <p>Постов в Москве: {{ post_from_moscow }}</p>
 <p>Постов в Санкт-Петербурге: {{ post_from_spb }}</p>
 <p>Постов в Неизвестном городе: {{ post_from_nowhere}}</p>
+<div id="city"></div>
 
+<h3>Остальное</h3>
 <p>Постов без категории: {{ post_without_category }}</p>
 <p>Постов с бронью: {{ booked_postst }}</p>
 <p>Постов, еду из которых уже забрали: {{ lost_posts }}</p>
+<div id="other"></div>
 
 <script>
-    category_stats = JSON.parse({{ category_stats }})
+    category_stats = {{% for cat in category_stats %}
+        '{{ cat.cat }}': {{ cat.val}},
+    {% endfor %}}
     post_from_moscow = {{ post_from_moscow }}
     post_from_spb = {{ post_from_spb }}
     post_from_nowhere = {{ post_from_nowhere }}
     post_without_category = {{ post_without_category }}
     booked_postst = {{ booked_postst }}
     lost_posts = {{ lost_posts }}
+
+    const x = ["Москва","Спб","Неизвестно"]
+    const y = [post_from_moscow, post_from_spb, post_from_nowhere].filter(Boolean)
+
+    if (y.length) {
+        const data = [
+            {
+                histfunc: "sum",
+                y: y,
+                x: x,
+                type: "histogram",
+                name: "sum"
+            }
+        ]
+
+        Plotly.newPlot('city', data)
+    }
+
+    const x_2 = ["Бронь","Спасли","Посты без категорий"]
+    const y_2 = [booked_postst, lost_posts, post_without_category].filter(Boolean)
+
+    if(y_2.length) {
+        const data_2 = [
+          {
+            histfunc: "sum",
+            y: y_2,
+            x: x_2,
+            type: "histogram",
+            name: "sum"
+          }
+        ]
+
+        Plotly.newPlot('other', data_2)
+    }
+
+    const x_3 = []
+    let y_3 = []
+
+    Object.entries(category_stats).forEach(([key, val]) => {
+        x_3.push(key)
+        y_3.push(val)
+    })
+
+    y_3 = y_3.filter(Boolean)
+
+    if (y_3.length) {
+        const data_3 = [
+          {
+            histfunc: "sum",
+            y: y_3,
+            x: x_3,
+            type: "histogram",
+            name: "sum"
+          }
+        ]
+
+        Plotly.newPlot('cat', data_3)
+    }
 </script>
 {% endblock %}

@@ -160,12 +160,19 @@ def webhook(request, token):
 def analytic(request):
   posts = Post.objects.all()
   category_stats = {}
+  category_stats_arr = []
 
   for post in posts:
-    if category_stats[post.category]:
+    if post.category in category_stats:
       category_stats[post.category] += 1
     else:
       category_stats[post.category] = 1
+
+  for cat in category_stats:
+    category_stats_arr.append({
+      'cat': cat,
+      'val': category_stats[cat]
+    })
 
   post_from_moscow = Post.objects.filter(city__exact='Москва').count()
   post_from_spb = Post.objects.filter(city__exact='Санкт-Петербург').count()
@@ -176,7 +183,7 @@ def analytic(request):
   lost_posts = Post.objects.filter(category__exact='unknow').count()
 
   return render(request, 'tgbot/analytic.html', {
-    'category_stats': category_stats,
+    'category_stats': category_stats_arr,
     'post_from_moscow': post_from_moscow,
     'post_from_spb': post_from_spb,
     'post_from_nowhere': post_from_nowhere,
