@@ -34,7 +34,7 @@ class Bot:
 
     self.bot.set_webhook('{}/{}/{}/'.format(url, 'bot', token))
 
-    update_queue = Queue()
+    self.update_queue = Queue()
     self.dispatcher = Dispatcher(self.bot, update_queue, workers=4)
 
     self.update_obj = None
@@ -137,5 +137,6 @@ class Bot:
     handler.register(self.dispatcher)
 
   def webhook(self, update):
+    self.update_queue.put(update)
     self.update_obj = Update.de_json(update, self.bot)
     self.dispatcher.process_update(self.update_obj)
