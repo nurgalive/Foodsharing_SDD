@@ -33,7 +33,7 @@ def start(update, context):
 def gender(update, context):
     user = update.message.from_user
     logger.info("Gender of %s: %s", user.first_name, update.message.text)
-    update.message.text('I see! Please send me a photo of yourself, '
+    update.message.reply_text('I see! Please send me a photo of yourself, '
                               'so I know what you look like, or send /skip if you don\'t want to.',
                               reply_markup=ReplyKeyboardRemove())
 
@@ -45,7 +45,7 @@ def photo(update, context):
     photo_file = update.message.photo[-1].get_file()
     photo_file.download('user_photo.jpg')
     logger.info("Photo of %s: %s", user.first_name, 'user_photo.jpg')
-    update.message.text('Gorgeous! Now, send me your location please, '
+    update.message.reply_text('Gorgeous! Now, send me your location please, '
                               'or send /skip if you don\'t want to.')
 
     return LOCATION
@@ -54,7 +54,7 @@ def photo(update, context):
 def skip_photo(update, context):
     user = update.message.from_user
     logger.info("User %s did not send a photo.", user.first_name)
-    update.message.text('I bet you look great! Now, send me your location please, '
+    update.message.reply_text('I bet you look great! Now, send me your location please, '
                               'or send /skip.')
 
     return LOCATION
@@ -65,7 +65,7 @@ def location(update, context):
     user_location = update.message.location
     logger.info("Location of %s: %f / %f", user.first_name, user_location.latitude,
                 user_location.longitude)
-    update.message.text('Maybe I can visit you sometime! '
+    update.message.reply_text('Maybe I can visit you sometime! '
                               'At last, tell me something about yourself.')
 
     return BIO
@@ -74,7 +74,7 @@ def location(update, context):
 def skip_location(update, context):
     user = update.message.from_user
     logger.info("User %s did not send a location.", user.first_name)
-    update.message.text('You seem a bit paranoid! '
+    update.message.reply_text('You seem a bit paranoid! '
                               'At last, tell me something about yourself.')
 
     return BIO
@@ -120,7 +120,7 @@ class Bot:
       
       # Add conversation handler with the states GENDER, PHOTO, LOCATION and BIO
       conv_handler = ConversationHandler(
-          entry_points=[CommandHandler('start', startgender(update_obj, self.bot))],
+          entry_points=[CommandHandler('start', start(update_obj, self.bot))],
 
           states={
               GENDER: [MessageHandler(Filters.regex('^(Boy|Girl|Other)$'), gender(update_obj, self.bot))],
