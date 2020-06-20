@@ -8,7 +8,6 @@ from datetime import datetime
 from .apps import TgbotConfig
 from .bot import Bot
 
-# Create your views here.
 @csrf_exempt
 def webhook(request, token):
     bot = TgbotConfig.registry.get_bot(token)

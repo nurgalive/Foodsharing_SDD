@@ -1,4 +1,6 @@
 import vk_api
+from pprint import pprint
+from datetime import datetime
 
 login, password = '+4915205901185', '78ododad'
 vk_session = vk_api.VkApi(login, password)
@@ -9,7 +11,19 @@ except vk_api.AuthError as error_msg:
 
 vk = vk_session.get_api()
 
-print(vk.wall.get(owner_id="https://vk.com/sharingfood"))
+
+for x in range(100):
+        post = vk.wall.get(domain="sharingfood", count=1)
+        text = post['items'][0]['text']
+        date = post['items'][0]['date']
+
+        print(text)
+        print(date)
+
+#pprint(vk.wall.get(domain="sharingfood", count=1)['items'][0]['text'])
+
+# получение id группы
+#print(datetime.fromtimestamp(int(1592579330)))
 
 #vk.groups.wall.get("https://vk.com/sharingfood")
 
