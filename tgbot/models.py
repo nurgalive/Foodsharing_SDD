@@ -18,3 +18,23 @@ class Message(models.Model):
 
   def __str__(self):
       return f'{self.text}'
+
+class Group(models.Model):
+  group_id= models.IntegerField(unique=True, primary_key=True)
+  name = models.TextField(max_length=4096)
+  link = models.URLField()
+  city = models.TextField(max_length=32)
+
+class Post(models.Model):
+  post_id = models.IntegerField(unique=True, primary_key=True)
+  text = models.TextField(max_length=4096, blank=True, null=True)
+  posted_date = models.DateTimeField(default=timezone.now, null=True, blank=True)
+  link = models.URLField(blank=True, null=True)
+  group_id = models.ForeignKey(Group, on_delete=models.CASCADE, related_name="group", default=0)
+  city = models.TextField(max_length=32, blank=True, null=True)
+  address = models.TextField(max_length=4096, blank=True, null=True)
+
+
+class Comment(models.Model):
+  post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="group", default=0)
+  text = models.TextField(max_length=4096)

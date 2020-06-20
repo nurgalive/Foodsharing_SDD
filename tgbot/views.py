@@ -1,12 +1,48 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseBadRequest, Http404
 from django.views.decorators.csrf import csrf_exempt
 import json
-from .models import User, Message
+from .models import User, Message, Post, Group, Comment
 from datetime import datetime
+import vk_api
 
 from .apps import TgbotConfig
 from .bot import Bot
+
+def home(request):
+  posts = Post.objects.all()
+  return render(request, 'tgbot/home.html', {'posts' : posts})
+
+def from_vk_to_db(request):
+  login, password = '+4915205901185', '78ododad'
+  vk_session = vk_api.VkApi(login, password)
+  try:
+          vk_session.auth()
+  except vk_api.AuthError as error_msg:
+          print(error_msg)
+
+  vk = vk_session.get_api()
+
+
+  for x in range(0,5):
+          post = vk.wall.get(domain="sharingfood", count=5)
+          text = post['items'][x]['text']
+          date = post['items'][x]['date']
+          post_id = post['items'][x]['id']
+          group_id = post['items'][x]['owner_id']
+
+          try:
+            Post.objects.get(post_id=post_id)
+          except:
+            group_id = group_id * -1
+            group = Group.objects.get(group_id=group_id)         
+            result = Post.objects.create(post_id=post_id, text=text, posted_date=datetime.fromtimestamp(int(date)), link="https://vk.com/sharingfood?w=wall-"+str(group_id)+"_"+str(post_id)+"%2Fall", group_id=group, city="Default City", address="Default address")
+            result.save()
+  return redirect('home')
+
+
+
+
 
 @csrf_exempt
 def webhook(request, token):

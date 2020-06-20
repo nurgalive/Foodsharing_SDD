@@ -1,0 +1,29 @@
+{% load static %}
+<html>
+    <head>
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+        <link href="https://fonts.googleapis.com/css?family=Noto+Serif+SC&display=swap" rel="stylesheet"> 
+
+        <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+
+        <link rel="stylesheet" href="{% static 'css/bot.css' %}">
+
+        <title>Bratishka bot</title>
+    </head>
+    <body>
+        <div class="page-header">
+            <h1><a href="/">Edudam Telegram Bot</a></h1>
+        </div>
+
+        <div class="content container">
+            <div class="row">
+                <div class="col-md-8">
+                    {% block content %}
+                    {% endblock %}
+                </div>
+            </div>
+        </div>
+
+    </body>
+</html>
