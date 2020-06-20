@@ -53,25 +53,29 @@ class Bot:
     help_handler = ConversationHandler(
       entry_points=[CommandHandler('help', self.help)],
       states={},
-      fallbacks=[CommandHandler('cancel', self.cancel)]
+      fallbacks=[CommandHandler('cancel', self.cancel)],
+      conversation_timeout=1
     )
 
     city_handler = ConversationHandler(
       entry_points=[CommandHandler('city', self.set_city)],
       states={},
-      fallbacks=[CommandHandler('cancel', self.cancel)]
+      fallbacks=[CommandHandler('cancel', self.cancel)],
+      conversation_timeout=1
     )
     set_city_handler = ConversationHandler(
       entry_points=[CommandHandler('set_city', self.cities)],
       states={},
-      fallbacks=[CommandHandler('cancel', self.cancel)]
+      fallbacks=[CommandHandler('cancel', self.cancel)],
+      conversation_timeout=1
     )
 
     # Хендлер поиска
     search_handler = ConversationHandler(
       entry_points=[CommandHandler('search', self.search)],
       states={},
-      fallbacks=[CommandHandler('cancel', self.cancel)]
+      fallbacks=[CommandHandler('cancel', self.cancel)],
+      conversation_timeout=1
     )
 
     self.dispatcher.add_handler(help_handler)
