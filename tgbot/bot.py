@@ -9,7 +9,7 @@ from telegram import (ReplyKeyboardMarkup, ReplyKeyboardRemove)
 from telegram.ext import (Updater, CommandHandler, MessageHandler, Filters,
                           ConversationHandler)
 
-from .models import Post
+from .models import Post, User
 
 
 # Enable logging
@@ -64,10 +64,17 @@ class Bot:
     return CITIES
 
   def cities(self, update, context):
+    user = self.update_obj.message.from_user
     reply_keyboard = [['Все', 'Молоко', 'Хлеб']]
 
+    selected_city = self.update_obj.message.text
+    user_db = User.objects.filter(user_id__exact=str(user.id)).get()
+    user_db.update(
+      city=selected_city
+    )
+
     self.update_obj.message.reply_text(
-      'Твой город: ' + self.update_obj.message.text + '\n\n'
+      'Твой город: ' + selected_city + '\n\n'
       'Выбери интересующие категории продуктов ',
       reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True))
 
@@ -82,9 +89,8 @@ class Bot:
 
   def cancel(self, update, context):
     user = self.update_obj.message.from_user
-    logger.info("Ты %s отменил общение.", user.first_name)
-    self.update_obj.message.reply_text('До встречи!',
-                              reply_markup=ReplyKeyboardRemove())
+    self.update_obj.message.reply_text('До встречи, ' + user.first_name,
+      reply_markup=ReplyKeyboardRemove())
 
     return ConversationHandler.END
 
