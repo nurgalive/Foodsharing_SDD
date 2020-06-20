@@ -92,7 +92,7 @@ class Bot:
     category = self.update_obj.message.text
 
     user = self.update_obj.message.from_user
-    user_db = User.objects.filter(user_id__exact=str(user.id))
+    user_db = User.objects.filter(user_id__exact=str(user.id)).get()
 
     if show_more_text in category:
       _, parsed_offset = category.split('_')
