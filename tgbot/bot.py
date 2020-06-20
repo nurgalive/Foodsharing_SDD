@@ -118,17 +118,25 @@ class Bot:
       return CATEGORIES
 
     user = self.update_obj.message.from_user
-    user_db_filter = User.objects.filter(user_id__exact=str(user.id))
+    user_db_filter = User.objects.filter(user_id__exact=str(user.id)).get()
 
     category_db = Category.objects.filter(name__exact=str(category)).get()
+    user_categories = UserToCategory.objects.filter(user__exact=str(category))
+
+    is_category_added = False
+
+    for user_category in user_categories:
+      if user_category == category:
+        is_category_added = True
     
     try:
-      UserToCategory(
-        user=user_db_filter.get(),
-        category=category_db
-      ).save()
+      if is_category_added == False:
+        UserToCategory(
+          user=user_db_filter,
+          category=category_db
+        ).save()
     except (KeyError, ValueError):
-      return None
+      return self.update_obj.message.reply_text('Ошибка при добавлении категории')
 
     self.update_obj.message.reply_text(
       'Мы отфильтруем по выбранным категориям: ' + category,
