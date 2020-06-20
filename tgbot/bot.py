@@ -30,7 +30,7 @@ def start(update, context):
     'Выбери город',
     reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True))
 
-  return LOCATION
+  return CATEGORIES
 
 
 def categories(update, context):
