@@ -44,7 +44,7 @@ def from_vk_to_db(request):
       is_lost = get_is_lost(text)
       metro = get_metro_station(text)
 
-      print(post_id)
+      #print(post_id)
 
       #       try:
       #   Post.objects.filter(post_id=post_id)
@@ -67,8 +67,8 @@ def from_vk_to_db(request):
             continue
           except:
             try:
-             text = comments['items'][x]['text']
-             big_comment = big_comment + text + " "
+             comment_text = comments['items'][x]['text']
+             big_comment = big_comment + comment_text + " "
             except IndexError:
               continue
 
