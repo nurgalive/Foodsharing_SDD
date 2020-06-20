@@ -119,7 +119,7 @@ class Bot:
       info = ''
       if post.city is not None:
         info = info + 'Город: ' + post.city + '\n'
-      else
+      else:
         continue
 
       if post.metro is not None:
