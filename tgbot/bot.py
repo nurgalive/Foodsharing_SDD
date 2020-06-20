@@ -131,9 +131,18 @@ class Bot:
     except (KeyError, ValueError):
       return self.update_obj.message.reply_text('Ошибка при добавлении категории')
 
-    self.update_obj.message.reply_text(
-      'Мы отфильтруем по выбранным категориям: ' + category,
-      reply_markup=ReplyKeyboardRemove())
+    if user_categories.count() == 0:
+      self.update_obj.message.reply_text(
+        'Мы отфильтруем по выбранным категориям: ' + category,
+        reply_markup=ReplyKeyboardRemove()
+      )
+    else:
+      self.update_obj.message.reply_text(
+        f'Категоря "{category}" уже добавлена',
+        reply_markup=ReplyKeyboardRemove()
+      )
+
+
 
     return ConversationHandler.END
 
