@@ -21,7 +21,7 @@ logger = logging.getLogger(__name__)
 
 CATEGORIES, CITIES = range(2)
 
-categories = all_cats.keys()
+categories = list(all_cats.keys())
 MAX_CATEGORIES = 5
 show_more_text = 'Ещё'
 
@@ -90,10 +90,13 @@ class Bot:
     category = self.update_obj.message.text
     start = self.category_offset * MAX_CATEGORIES
     end = self.category_offset * MAX_CATEGORIES + MAX_CATEGORIES
+    self.category_offset += 1
 
-    if category == show_more_text & len(categories) < end:
+    if category == show_more_text:
       reply_keyboard = [['Все', *categories[start:end], show_more_text]]
-      self.category_offset += 1
+
+      if len(categories) < end:
+        reply_keyboard = [['Все', *categories[start:end]]]
 
       self.update_obj.message.reply_text(
         'Выбери интересующие категории продуктов ',
@@ -105,6 +108,7 @@ class Bot:
     self.update_obj.message.reply_text(
       'Мы отфильтруем по выбранным категориям: ' + category,
       reply_markup=ReplyKeyboardRemove())
+    self.category_offset = 0
 
     posts = Post.objects.all()
 
@@ -120,6 +124,7 @@ class Bot:
     user = self.update_obj.message.from_user
     self.update_obj.message.reply_text('До встречи, ' + user.first_name,
       reply_markup=ReplyKeyboardRemove())
+    self.category_offset = 0
 
     return ConversationHandler.END
 
