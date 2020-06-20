@@ -143,5 +143,5 @@ class Bot:
       update_obj = Update.de_json(update, self.bot)
 
       message_text = str(update_obj.message.from_user.username) + " сказал: " + update_obj.message.text
-      update_obj.message.reply_text(update_obj.message.text)
+      update_obj.message.reply_text(message_text)
       self.dispatcher.process_update(update_obj)

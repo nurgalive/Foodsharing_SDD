@@ -73,7 +73,6 @@ def webhook(request, token):
   except ValueError as e:
     return HttpResponseBadRequest(str(e))
   if result is True:
-    
     if bot is not None:
       bot.webhook(json.loads(request.body.decode('utf-8')))
       return HttpResponse('OK')
