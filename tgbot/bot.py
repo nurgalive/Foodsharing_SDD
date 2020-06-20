@@ -33,7 +33,7 @@ class Bot:
 
     self.bot.set_webhook('{}/{}/{}/'.format(url, 'bot', token))
 
-    self.dispatcher = Dispatcher(self.bot, None, workers=0)
+    self.dispatcher = Dispatcher(self.bot, None, workers=4)
 
     self.update_obj = None
 
