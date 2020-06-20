@@ -7,7 +7,9 @@
             <div class="date">
                 {{ post.date }}
             </div>
-            <h3>{{ post.group_id }} {{ post.city }}</h3>
+            <h3>Город: {{ post.city }}</h3>
+            <h3>Категория: {{ post.category }}</h3>
+            <h3>Забронирован ли: {{ post.is_book }}</h3>
             <p>{{ post.text|linebreaksbr }}</p>
             <hr>
         </div>
