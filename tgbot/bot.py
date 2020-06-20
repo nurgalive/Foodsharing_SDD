@@ -39,20 +39,8 @@ class Bot:
 
     self.update_obj = None
 
-    # Хендлер регистрации с состояниями CITIES and CATEGORIES
-    #register_handler = ConversationHandler(
-    #  entry_points=[CommandHandler('start', self.start)],
-
-    #  states={
-    #    CITIES:     [MessageHandler(Filters.regex('^(Москва|Санкт-Петербург)$'), self.cities)],
-    #    CATEGORIES: [MessageHandler(Filters.regex(f'^(Все|{("|").join(categories)}|{show_more_text}_\d)$'), self.categories)],
-    #  },
-
-    #  fallbacks=[CommandHandler('cancel', self.cancel)]
-    #)
-
-    help_handler = CommandHandler('help', self,help)
-    start_handler = CommandHandler('start', self,help)
+    help_handler = CommandHandler('help', self.help)
+    start_handler = CommandHandler('start', self.start)
 
     city_handler = CommandHandler('city', self.set_city)
     category_handler = CommandHandler('category', self.set_category)
