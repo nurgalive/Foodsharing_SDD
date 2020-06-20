@@ -152,7 +152,7 @@ class Bot:
     for post in posts:
       info = ''
       if post.city is not None:
-        info = info + 'Город: ' + post.city + '\n'
+        info = info + '\nГород: ' + post.city + '\n'
       else:
         continue
 
@@ -163,7 +163,7 @@ class Bot:
         info = info + 'Адрес: ' + post.address + '\n'
 
       self.update_obj.message.reply_text(
-        '' + info + '\n\n'
+        '' + info + '\n'
                     'Ссылка на пост: ' + post.link + ''
       )
 
