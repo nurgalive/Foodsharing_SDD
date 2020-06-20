@@ -40,14 +40,24 @@ class Bot:
     self.update_obj = None
 
     # Хендлер регистрации с состояниями CITIES and CATEGORIES
-    register_handler = ConversationHandler(
-      entry_points=[CommandHandler('start', self.start)],
+    #register_handler = ConversationHandler(
+    #  entry_points=[CommandHandler('start', self.start)],
 
-      states={
-        CITIES:     [MessageHandler(Filters.regex('^(Москва|Санкт-Петербург)$'), self.cities)],
-        CATEGORIES: [MessageHandler(Filters.regex(f'^(Все|{("|").join(categories)}|{show_more_text}_\d)$'), self.categories)],
-      },
+    #  states={
+    #    CATEGORIES: [MessageHandler(Filters.regex(f'^(Все|{("|").join(categories)}|{show_more_text}_\d)$'), self.categories)],
+    #  },
 
+    #  fallbacks=[CommandHandler('cancel', self.cancel)]
+    #)
+
+    city_handler = ConversationHandler(
+      entry_points=[CommandHandler('city', self.set_city)],
+      states={},
+      fallbacks=[CommandHandler('cancel', self.cancel)]
+    )
+    set_city_handler = ConversationHandler(
+      entry_points=[CommandHandler('set_city', self.cities)],
+      states={},
       fallbacks=[CommandHandler('cancel', self.cancel)]
     )
 
@@ -58,7 +68,8 @@ class Bot:
       fallbacks=[CommandHandler('cancel', self.cancel)]
     )
 
-    self.dispatcher.add_handler(register_handler)
+    self.dispatcher.add_handler(city_handler)
+    self.dispatcher.add_handler(set_city_handler)
     self.dispatcher.add_handler(search_handler)
     self.dispatcher.add_error_handler(self.error_handler)
 
@@ -74,11 +85,19 @@ class Bot:
       'Выбери город',
       reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True))
 
+    return 'set_city'
+
+  def set_city(self, update, context):
+    reply_keyboard = [['Москва', 'Санкт-Петербург']]
+
+    self.update_obj.message.reply_text(
+      'Выбери город',
+      reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True))
+
     return CITIES
 
   def cities(self, update, context):
     user = self.update_obj.message.from_user
-    reply_keyboard = [['Все', *categories[:MAX_CATEGORIES], f'{show_more_text}_1']]
 
     selected_city = self.update_obj.message.text
     user_db = User.objects.filter(user_id__exact=str(user.id))
@@ -90,10 +109,9 @@ class Bot:
 
     self.update_obj.message.reply_text(
       'Твой город: ' + selected_city + '\n\n'
-      'Выбери интересующие категории продуктов ',
-      reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True))
+    )
 
-    return CATEGORIES
+    return ConversationHandler.END
 
 
   def categories(self, update: Update, context: CallbackContext):
