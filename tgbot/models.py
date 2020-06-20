@@ -12,8 +12,8 @@ class Category(models.Model):
   name = models.TextField(max_length=4096)
 
 class UserToCategory(models.Model):
-  user = models.ForeignKey(Group, on_delete=models.CASCADE, related_name="group", default=0)
-  category = models.ForeignKey(Group, on_delete=models.CASCADE, related_name="group", default=0)
+  user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="group", default=0)
+  category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="group", default=0)
 
   def __str__(self):
       return f'{self.first_name} {self.last_name}'
