@@ -2,17 +2,18 @@
 
 {% block content %}
 <a class="btn btn-default" href="{% url 'from_vk_to_db' %}">Get posts from VK</a>
-    {% for post in posts %}
-        <div class="message">
-            <div class="date">
-                {{ post.date }}
-            </div>
-            <h3>Город: {{ post.city }}</h3>
-            <h3>Категория: {{ post.category }}</h3>
-            <h3>Забронирован ли: {{ post.is_book }}</h3>
-            <h3>Забрали ли: {{ post.is_lost }}</h3>
-            <p>{{ post.text|linebreaksbr }}</p>
-            <hr>
+<a class="btn btn-default" href="{% url 'upload_cats_to_db' %}">Upload cats to DB</a>
+{% for post in posts %}
+    <div class="message">
+        <div class="date">
+            {{ post.date }}
         </div>
-    {% endfor %}
+        <h3>Город: {{ post.city }}</h3>
+        <h3>Категория: {{ post.category }}</h3>
+        <h3>Забронирован ли: {{ post.is_book }}</h3>
+        <h3>Забрали ли: {{ post.is_lost }}</h3>
+        <p>{{ post.text|linebreaksbr }}</p>
+        <hr>
+    </div>
+{% endfor %}
 {% endblock %}
