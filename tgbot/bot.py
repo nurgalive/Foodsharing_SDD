@@ -118,7 +118,6 @@ class Bot:
 
     def webhook(self, update):
       update_obj = Update.de_json(update, self.bot)
-      self.dispatcher.process_update(update_obj)
       
       # Add conversation handler with the states GENDER, PHOTO, LOCATION and BIO
       conv_handler = ConversationHandler(
@@ -140,3 +139,4 @@ class Bot:
       )
 
       self.dispatcher.add_handler(conv_handler)
+      self.dispatcher.process_update(update_obj)
