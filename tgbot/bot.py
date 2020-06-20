@@ -1,10 +1,10 @@
 from django.conf import settings
-from telegram import Bot as TelegramBot, Update
-from telegram.ext import Dispatcher, Updater
 
 import logging
 
+from telegram import Bot as TelegramBot, Update
 from telegram import (ReplyKeyboardMarkup, ReplyKeyboardRemove)
+from telegram.ext import Dispatcher, Updater
 from telegram.ext import (Updater, CommandHandler, MessageHandler, Filters,
                           ConversationHandler)
 
