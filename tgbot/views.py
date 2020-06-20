@@ -3,11 +3,11 @@ from django.http import HttpResponse, HttpResponseBadRequest, Http404
 from django.views.decorators.csrf import csrf_exempt
 import json
 
-from utils.getCategory import get_food_category
+from utils.getCategory import get_food_category, all_cats
 from utils.gitCity import get_city
 from utils.getIsBooked import get_is_booked
 from utils.getIsLost import get_is_lost
-from .models import User, Message, Post, Group, Comment
+from .models import User, Message, Post, Group, Comment, Category
 from datetime import datetime
 import vk_api
 
@@ -22,9 +22,9 @@ def from_vk_to_db(request):
   login, password = '+4915205901185', '78ododad'
   vk_session = vk_api.VkApi(login, password)
   try:
-          vk_session.auth()
+    vk_session.auth()
   except vk_api.AuthError as error_msg:
-          print(error_msg)
+    print(error_msg)
 
   vk = vk_session.get_api()
 
@@ -59,6 +59,12 @@ def from_vk_to_db(request):
       result.save()
 
   return redirect('home')
+
+def upload_cats_to_db():
+  for category in all_cats:
+    if Category.objects.filter(name__exact=category).count() == 0:
+      result = Category.objects.create(name=category)
+      result.save()
 
 @csrf_exempt
 def webhook(request, token):
