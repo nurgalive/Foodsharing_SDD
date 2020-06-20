@@ -26,11 +26,6 @@ class Bot:
     
     self.dispatcher = None
 
-    # if settings.DEBUG:
-    # self.updater = Updater(token)
-    # self.dispatcher = self.updater.dispatcher
-        
-    # else:
     self.bot.set_webhook('{}/{}/{}/'.format(url, 'bot', token))
 
     self.dispatcher = Dispatcher(self.bot, None, workers=0)
@@ -39,14 +34,14 @@ class Bot:
 
     # Add conversation handler with the states GENDER, PHOTO, LOCATION and BIO
     conv_handler = ConversationHandler(
-        entry_points=[CommandHandler('start', self.start)],
+      entry_points=[CommandHandler('start', self.start)],
 
-        states={
-          CITIES:     [MessageHandler(Filters.regex('^(Москва|Cпб)$'), self.cities)],
-          CATEGORIES: [MessageHandler(Filters.regex('^(Все|Молоко|Хлеб)$'), self.categories)],
-        },
+      states={
+        CITIES:     [MessageHandler(Filters.regex('^(Москва|Cпб)$'), self.cities)],
+        CATEGORIES: [MessageHandler(Filters.regex('^(Все|Молоко|Хлеб)$'), self.categories)],
+      },
 
-        fallbacks=[CommandHandler('cancel', self.cancel)]
+      fallbacks=[CommandHandler('cancel', self.cancel)]
     )
 
     self.dispatcher.add_handler(conv_handler)
@@ -82,7 +77,8 @@ class Bot:
 
 
   def categories(self, update, context):
-    self.update_obj.message.reply_text('Мы отфильтруем по выбранным категориям: ' + self.update_obj.message.text,
+    self.update_obj.message.reply_text(
+      'Мы отфильтруем по выбранным категориям: ' + self.update_obj.message.text,
       reply_markup=ReplyKeyboardRemove())
 
     return ConversationHandler.END
