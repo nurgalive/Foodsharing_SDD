@@ -158,7 +158,7 @@ class Bot:
     user_db = User.objects.filter(user_id__exact=str(user.id)).get()
     user_categories = UserToCategory.objects.filter(user=user_db)
 
-    categories = map(lambda qs: qs.category.name, user_categories)
+    categories = list(map(lambda qs: qs.category.name, user_categories))
     posts = Post.objects.filter(city__exact=user_db.city)
     filtered_posts = []
 
@@ -166,8 +166,10 @@ class Bot:
       filtered_posts = posts
     else:
       for post in posts:
+        print(post.category == categories[0])
         if post.category in categories:
           filtered_posts.append(post)
+    print(filtered_posts)
 
     for post in filtered_posts:
       info = ''
@@ -175,6 +177,9 @@ class Bot:
         info = info + '\nГород: ' + post.city + '\n'
       else:
         continue
+
+      if post.category != 'unknown':
+        info = info + 'Категория: ' + post.category + '\n'
 
       if post.metro != 'unknown':
         info = info + 'Метро: ' + post.metro + '\n'
