@@ -54,7 +54,7 @@ class Bot:
   def start(self, update, context):
     reply_keyboard = [['Москва', 'Спб']]
 
-    update.message.reply_text(
+    self.update_obj.message.reply_text(
       'Привет! Это бот едудам. Поговори со мной. '
       'Отправь /cancel чтобы остановить разговор со мной.\n\n'
       'Выбери город',
@@ -65,9 +65,9 @@ class Bot:
 
   def categories(self, update, context):
     reply_keyboard = [['Все', 'Молоко', "Хлеб"]]
-    user = update.message.from_user
+    user = self.update_obj.message.from_user
 
-    update.message.reply_text(
+    self.update_obj.message.reply_text(
       'Выбери интересующие категории продуктов',
       reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True))
 
@@ -75,9 +75,9 @@ class Bot:
 
 
   def cancel(self, update, context):
-    user = update.message.from_user
+    user = self.update_obj.message.from_user
     logger.info("User %s canceled the conversation.", user.first_name)
-    update.message.reply_text('Bye! I hope we can talk again some day.',
+    self.update_obj.message.reply_text('Bye! I hope we can talk again some day.',
                               reply_markup=ReplyKeyboardRemove())
 
     return ConversationHandler.END
