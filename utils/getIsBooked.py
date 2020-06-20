@@ -1,4 +1,4 @@
-book_words = ['бронь', 'спасу', 'забронированно']
+book_words = ['бронь', 'спасу', 'забронированно', 'заберу', 'возьму']
 
 def get_is_booked(text):
     processed_text = text.lower()
