@@ -1,6 +1,6 @@
 # our ignore
 venv
-
+vk_config.v2.json
 
 
 # Byte-compiled / optimized / DLL files
