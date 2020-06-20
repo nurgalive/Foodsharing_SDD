@@ -1,5 +1,4 @@
 from django.apps import AppConfig
-from telegram import Bot
 
 class BotRegistry:
     def __init__(self):
@@ -16,4 +15,4 @@ class TgbotConfig(AppConfig):
     registry = None
 
     def ready(self):
-      TgbotConfig.registry = BotRegistry()
+        TgbotConfig.registry = BotRegistry()
