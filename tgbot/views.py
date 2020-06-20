@@ -19,6 +19,20 @@ def home(request):
   posts = Post.objects.all()
   return render(request, 'tgbot/home.html', {'posts' : posts})
 
+def notify_users(request):
+  token = "1264768775:AAHvmoU7AZTvcL4ljxIDD78y048Rs5okQKU"
+  bot = TgbotConfig.registry.get_bot(token)
+  
+  if bot is None:
+    bot = Bot(token)
+    TgbotConfig.registry.add_bot(token, bot)
+
+  bot.send_message(chat_id=42737369, text="Хэй, бро!")
+  bot.send_message(chat_id=217254731, text="Хэй, бро!")
+
+  return redirect('home')
+
+
 def from_vk_to_db(request):
   login, password = '+4915205901185', '78ododad'
   vk_session = vk_api.VkApi(login, password)
