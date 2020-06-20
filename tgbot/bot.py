@@ -18,7 +18,7 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 
 logger = logging.getLogger(__name__)
 
-LOCATION, BIO = range(4)
+LOCATION, BIO = range(2)
 
 
 def start(update, context):
