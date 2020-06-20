@@ -90,16 +90,13 @@ class Bot:
 
   def categories(self, update: Update, context: CallbackContext):
     category = self.update_obj.message.text
-    offset = 0
 
     if show_more_text in category:
       _, parsed_offset = category.split('_')
       offset = int(parsed_offset)
+      start = offset * MAX_CATEGORIES
+      end = offset * MAX_CATEGORIES + MAX_CATEGORIES
 
-    start = offset * MAX_CATEGORIES
-    end = offset * MAX_CATEGORIES + MAX_CATEGORIES
-
-    if category == show_more_text:
       reply_keyboard = [['Все', *categories[start:end], f'{show_more_text}_{offset+1}']]
 
       if len(categories) < end:
