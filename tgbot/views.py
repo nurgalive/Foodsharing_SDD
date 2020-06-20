@@ -5,8 +5,8 @@ import json
 
 from utils.getCategory import get_food_category
 from utils.gitCity import get_city
-from utils.isBooked import is_booked
-from utils.isLost import get_is_lost
+from utils.getIsBooked import get_is_booked
+from utils.getIsLost import get_is_lost
 from .models import User, Message, Post, Group, Comment
 from datetime import datetime
 import vk_api
@@ -36,7 +36,7 @@ def from_vk_to_db(request):
     post_id = post['items'][x]['id']
     group_id = post['items'][x]['owner_id']
     city = get_city(text)
-    is_book = is_booked(text)
+    is_book = get_is_booked(text)
     category = get_food_category(text)
     is_lost = get_is_lost(text)
 

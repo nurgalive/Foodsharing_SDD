@@ -6,7 +6,7 @@ class City(Enum):
     UNKNOWN = 'Неизвестно'
 
 city_aliases = {
-    City.MSC: ['москва', 'мск', 'moscow', 'msc'],
+    City.MSC: ['москва', 'мск', 'moscow', 'msc', 'моск'],
     City.SPB: ['питер', 'спб', 'санкт-петербург', 'spb', 'saint-petersburg'],
 }
 

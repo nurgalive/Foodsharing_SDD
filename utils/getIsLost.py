@@ -1,4 +1,4 @@
-lost_words = ['забр']
+lost_words = ['забра', 'ушел']
 
 def get_is_lost(text):
     processed_text = text.lower()
