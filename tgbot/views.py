@@ -5,13 +5,13 @@ import json
 from .models import User, Message
 from datetime import datetime
 
-from .bot import Bot
+from .apps import TgbotConfig
 
 
 # Create your views here.
 @csrf_exempt
 def webhook(request, token):
-    bot = Bot(token, 'edudam.herokuapp.com')
+    bot = TgbotConfig.registry.get_bot(token)
     if bot is not None:
         bot.webhook(json.loads(request.body.decode('utf-8')))
         return HttpResponse()

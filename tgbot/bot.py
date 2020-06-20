@@ -97,7 +97,7 @@ def cancel(update, context):
     return ConversationHandler.END
 
 class Bot:
-    def __init__(self, token, url):
+    def __init__(self, token, url='edudam.herokuapp.com'):
       self.bot = TelegramBot(token)
       self.dispatcher = None
 
@@ -112,29 +112,29 @@ class Bot:
       self.dispatcher = Dispatcher(self.bot, None, workers=0)
 
     def register(self, handler):
+      handler.register(self.dispatcher)
+
+    def webhook(self, update):
+      update_obj = Update.de_json(update, self.bot)
+      self.dispatcher.process_update(update_obj)
+      
       # Add conversation handler with the states GENDER, PHOTO, LOCATION and BIO
       conv_handler = ConversationHandler(
-          entry_points=[CommandHandler('start', start)],
+          entry_points=[CommandHandler('start', start(update_obj, self.bot))],
 
           states={
-              GENDER: [MessageHandler(Filters.regex('^(Boy|Girl|Other)$'), gender)],
+              GENDER: [MessageHandler(Filters.regex('^(Boy|Girl|Other)$'), gender(update_obj, self.bot))],
 
               PHOTO: [MessageHandler(Filters.photo, photo),
-                      CommandHandler('skip', skip_photo)],
+                      CommandHandler('skip', skip_photo(update_obj, self.bot))],
 
-              LOCATION: [MessageHandler(Filters.location, location),
-                        CommandHandler('skip', skip_location)],
+              LOCATION: [MessageHandler(Filters.location, location(update_obj, self.bot)),
+                        CommandHandler('skip', skip_location(update_obj, self.bot))],
 
-              BIO: [MessageHandler(Filters.text, bio)]
+              BIO: [MessageHandler(Filters.text, bio(update_obj, self.bot))]
           },
 
           fallbacks=[CommandHandler('cancel', cancel)]
       )
 
       self.dispatcher.add_handler(conv_handler)
-      handler.register(self.dispatcher)
-
-
-    def webhook(self, update):
-      update_obj = Update.de_json(update, self.bot)
-      self.dispatcher.process_update(update_obj)
