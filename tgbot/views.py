@@ -30,7 +30,7 @@ def from_vk_to_db(request):
   vk = vk_session.get_api()
 
   groups = Group.objects.all()
-  for group in groups:g
+  for group in groups:
     domain = group.link[15:len(group.link)]
     for x in range(0,5):
       post = vk.wall.get(domain=domain, count=5)
