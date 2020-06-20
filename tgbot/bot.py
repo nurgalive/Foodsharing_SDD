@@ -2,6 +2,7 @@ from django.conf import settings
 
 from telegram import Bot as TelegramBot, Update
 from telegram.ext import Dispatcher, Updater, CallbackContext
+from queue import Queue
 
 import logging
 
@@ -33,7 +34,8 @@ class Bot:
 
     self.bot.set_webhook('{}/{}/{}/'.format(url, 'bot', token))
 
-    self.dispatcher = Dispatcher(self.bot, None, workers=4)
+    update_queue = Queue()
+    self.dispatcher = Dispatcher(self.bot, update_queue, workers=4)
 
     self.update_obj = None
 
