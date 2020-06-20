@@ -79,16 +79,16 @@ def webhook(request, token):
 
     sender_object = None
 
-    if User.objects.filter(user_id__exact=sender_id).count() > 0:
-      sender_object = User.objects.filter(user_id__exact=sender_id).get()
+    if User.objects.filter(user_id__exact=str(sender_id)).count() > 0:
+      sender_object = User.objects.filter(user_id__exact=str(sender_id)).get()
     else:
       try:
         User(
-          user_id = sender_id,
+          user_id = str(sender_id),
           first_name=json_dict['message']['from'].get('first_name'),
           last_name=json_dict['message']['from'].get('last_name'),
         ).save()
-        sender_object = User.objects.filter(user_id__exact=sender_id).get()
+        sender_object = User.objects.filter(user_id__exact=str(sender_id)).get()
       except (KeyError, ValueError):
         return None
 

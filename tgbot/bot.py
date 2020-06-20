@@ -9,6 +9,9 @@ from telegram import (ReplyKeyboardMarkup, ReplyKeyboardRemove)
 from telegram.ext import (Updater, CommandHandler, MessageHandler, Filters,
                           ConversationHandler)
 
+from .models import Post
+
+
 # Enable logging
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=logging.INFO)
@@ -142,6 +145,9 @@ class Bot:
     def webhook(self, update):
       update_obj = Update.de_json(update, self.bot)
 
-      message_text = str(update_obj.message.from_user.username) + " сказал: " + update_obj.message.text
-      update_obj.message.reply_text(message_text)
+      posts = Post.objects.all()
+
+      for post in posts:
+        update_obj.message.reply_text(post.text)
+      
       self.dispatcher.process_update(update_obj)
