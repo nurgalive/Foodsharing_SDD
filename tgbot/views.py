@@ -8,7 +8,7 @@ from datetime import datetime
 from .apps import TgbotConfig
 from .bot import Bot
 
-# Create your views here.
+Create your views here.
 @csrf_exempt
 def webhook(request, token):
     bot = TgbotConfig.registry.get_bot(token)
@@ -17,7 +17,7 @@ def webhook(request, token):
       TgbotConfig.registry.add_bot(token, bot)
     
     if bot is not None:
-        bot.webhook(json.loads(request.body.decode('utf-8')))
+        # bot.webhook(json.loads(request.body.decode('utf-8')))
         return HttpResponse()
     else:
         raise Http404
