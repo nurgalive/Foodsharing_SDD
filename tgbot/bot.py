@@ -120,22 +120,22 @@ class Bot:
       self.dispatcher.process_update(update_obj)
       
       # Add conversation handler with the states GENDER, PHOTO, LOCATION and BIO
-      conv_handler = ConversationHandler(
-          entry_points=[CommandHandler('start', start(update_obj, self.bot))],
+      # conv_handler = ConversationHandler(
+      #     entry_points=[CommandHandler('start', start(update_obj, self.bot))],
 
-          states={
-              GENDER: [MessageHandler(Filters.regex('^(Boy|Girl|Other)$'), gender(update_obj, self.bot))],
+      #     states={
+      #         GENDER: [MessageHandler(Filters.regex('^(Boy|Girl|Other)$'), gender(update_obj, self.bot))],
 
-              PHOTO: [MessageHandler(Filters.photo, photo),
-                      CommandHandler('skip', skip_photo(update_obj, self.bot))],
+      #         PHOTO: [MessageHandler(Filters.photo, photo),
+      #                 CommandHandler('skip', skip_photo(update_obj, self.bot))],
 
-              LOCATION: [MessageHandler(Filters.location, location(update_obj, self.bot)),
-                        CommandHandler('skip', skip_location(update_obj, self.bot))],
+      #         LOCATION: [MessageHandler(Filters.location, location(update_obj, self.bot)),
+      #                   CommandHandler('skip', skip_location(update_obj, self.bot))],
 
-              BIO: [MessageHandler(Filters.text, bio(update_obj, self.bot))]
-          },
+      #         BIO: [MessageHandler(Filters.text, bio(update_obj, self.bot))]
+      #     },
 
-          fallbacks=[CommandHandler('cancel', cancel)]
-      )
+      #     fallbacks=[CommandHandler('cancel', cancel)]
+      # )
 
-      self.dispatcher.add_handler(conv_handler)
+      # self.dispatcher.add_handler(conv_handler)
