@@ -55,7 +55,7 @@ def get_food_category(text):
   for category in morph_cats:
     for food in morph_cats[category]:
       for word in food:
-        if (len(word) < 3):
+        if (len(word) <= 3):
           continue
 
         if word in processed_text:
@@ -69,4 +69,25 @@ def get_food_category(text):
     return 'unknown'
 
   # берем категорию, продукты из которой чаще всего встречались в тексте
-  return max(detected_cats, key=detected_cats.get)
+  category_with_max_match = max(detected_cats, key=detected_cats.get)
+  category_with_max_match_count = detected_cats[category_with_max_match]
+
+  if (category_with_max_match == 'готовые блюда'):
+    detected_cats[category_with_max_match] = 0
+  else:
+    return category_with_max_match
+
+  second_category_with_max_match = max(detected_cats, key=detected_cats.get)
+  second_category_with_max_match_count = 0
+  if detected_cats[second_category_with_max_match]:
+    second_category_with_max_match_count = detected_cats[second_category_with_max_match]
+
+  if (
+      (category_with_max_match != second_category_with_max_match) &
+      (category_with_max_match_count - second_category_with_max_match_count > 10)
+  ):
+    return category_with_max_match
+  elif second_category_with_max_match_count == 0:
+    return 'unknown'
+
+  return second_category_with_max_match
