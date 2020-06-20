@@ -16,12 +16,6 @@ def webhook(request, token):
   if bot is None:
     bot = Bot(token)
     TgbotConfig.registry.add_bot(token, bot)
-    
-    # if bot is not None:
-    #     # bot.webhook(json.loads(request.body.decode('utf-8')))
-    #     return HttpResponse()
-    # else:
-    #     raise Http404
 
   # please insert magic here
   try:
@@ -73,6 +67,12 @@ def webhook(request, token):
   except ValueError as e:
     return HttpResponseBadRequest(str(e))
   if result is True:
-    return HttpResponse('OK')
+    
+    if bot is not None:
+      bot.webhook(json.loads(request.body.decode('utf-8')))
+      return HttpResponse('OK')
+    else:
+      raise Http404
+    
   else:
     return HttpResponseBadRequest('Malformed or incomplete JSON data received')

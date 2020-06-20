@@ -107,41 +107,39 @@ class Bot:
       self.dispatcher = None
 
       # if settings.DEBUG:
-      self.updater = Updater(token)
-      self.dispatcher = self.updater.dispatcher
+      # self.updater = Updater(token)
+      # self.dispatcher = self.updater.dispatcher
           
       # else:
-      # self.bot.set_webhook('{}/{}/{}/'.format(url, 'bot', token))
+      self.bot.set_webhook('{}/{}/{}/'.format(url, 'bot', token))
 
-      # self.dispatcher = Dispatcher(self.bot, None, workers=0)
+      self.dispatcher = Dispatcher(self.bot, None, workers=0)
       
       # Add conversation handler with the states GENDER, PHOTO, LOCATION and BIO
-      conv_handler = ConversationHandler(
-          entry_points=[CommandHandler('start', start)],
+      # conv_handler = ConversationHandler(
+      #     entry_points=[CommandHandler('start', start)],
 
-          states={
-              GENDER: [MessageHandler(Filters.regex('^(Boy|Girl|Other)$'), gender)],
+      #     states={
+      #         GENDER: [MessageHandler(Filters.regex('^(Boy|Girl|Other)$'), gender)],
 
-              PHOTO: [MessageHandler(Filters.photo, photo),
-                      CommandHandler('skip', skip_photo)],
+      #         PHOTO: [MessageHandler(Filters.photo, photo),
+      #                 CommandHandler('skip', skip_photo)],
 
-              # LOCATION: [MessageHandler(Filters.location, location(update_obj, self.bot)),
-              #           CommandHandler('skip', skip_location(update_obj, self.bot))],
+      #         # LOCATION: [MessageHandler(Filters.location, location(update_obj, self.bot)),
+      #         #           CommandHandler('skip', skip_location(update_obj, self.bot))],
 
-              BIO: [MessageHandler(Filters.text, bio)]
-          },
+      #         BIO: [MessageHandler(Filters.text, bio)]
+      #     },
 
-          fallbacks=[CommandHandler('cancel', cancel)]
-      )
+      #     fallbacks=[CommandHandler('cancel', cancel)]
+      # )
 
-      self.dispatcher.add_handler(conv_handler)
+      # self.dispatcher.add_handler(conv_handler)
 
-      self.updater.start_polling()
+    def register(self, handler):
+      handler.register(self.dispatcher)
 
-    # def register(self, handler):
-    #   handler.register(self.dispatcher)
-
-    # def webhook(self, update):
-    #   update_obj = Update.de_json(update, self.bot)
-      
-    #   self.dispatcher.process_update(update_obj)
+    def webhook(self, update):
+      update_obj = Update.de_json(update, self.bot)
+      update.message.reply_text(update_obj.message.text)
+      self.dispatcher.process_update(update_obj)
