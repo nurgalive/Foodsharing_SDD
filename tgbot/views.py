@@ -40,9 +40,9 @@ def from_vk_to_db(request):
     is_lost = get_is_lost(text)
 
     # check, if post already exists
-    try:
-      Post.objects.get(post_id=post_id)
-    except:
+    if post_id == None:
+      post = Post.objects.get(post_id=post_id)
+    else:
       group_id = group_id * -1
       group = Group.objects.get(group_id=group_id)
 
