@@ -47,7 +47,7 @@ for category in all_cats:
 
   morph_cats[category] = foods
 
-
+# ищем вхождение категории в тексте
 def get_food_category(text):
   processed_text = text.lower()
   detected_cats = {}
@@ -68,4 +68,5 @@ def get_food_category(text):
   if len(detected_cats) == 0:
     return 'unknown'
 
+  # берем категорию, продукты из которой чаще всего встречались в тексте
   return max(detected_cats, key=detected_cats.get)
