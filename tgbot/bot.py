@@ -99,6 +99,7 @@ def cancel(update, context):
 class Bot:
     def __init__(self, token, url='edudam.herokuapp.com'):
       self.bot = TelegramBot(token)
+      
       self.dispatcher = None
 
       # if settings.DEBUG:

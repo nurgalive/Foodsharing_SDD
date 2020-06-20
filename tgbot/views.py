@@ -6,12 +6,16 @@ from .models import User, Message
 from datetime import datetime
 
 from .apps import TgbotConfig
-
+from telegram import Bot as TelegramBot
 
 # Create your views here.
 @csrf_exempt
 def webhook(request, token):
     bot = TgbotConfig.registry.get_bot(token)
+    if bot is not None:
+      bot = TelegramBot(token)
+      TgbotConfig.registry.add_bot(token, bot)
+    
     if bot is not None:
         bot.webhook(json.loads(request.body.decode('utf-8')))
         return HttpResponse()

@@ -17,6 +17,3 @@ class TgbotConfig(AppConfig):
 
     def ready(self):
       TgbotConfig.registry = BotRegistry()
-
-      bot = Bot('1264768775:AAHvmoU7AZTvcL4ljxIDD78y048Rs5okQKU')
-      TgbotConfig.registry.add_bot('1264768775:AAHvmoU7AZTvcL4ljxIDD78y048Rs5okQKU', bot)
