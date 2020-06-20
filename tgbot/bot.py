@@ -18,7 +18,7 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 
 logger = logging.getLogger(__name__)
 
-GENDER, PHOTO, LOCATION, BIO = range(4)
+LOCATION, BIO = range(4)
 
 
 def start(update, context):
@@ -30,40 +30,7 @@ def start(update, context):
         'Are you a boy or a girl?',
         reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True))
 
-    return GENDER
-
-
-def gender(update, context):
-    user = update.message.from_user
-    logger.info("Gender of %s: %s", user.first_name, update.message.text)
-    update.message.reply_text('I see! Please send me a photo of yourself, '
-                              'so I know what you look like, or send /skip if you don\'t want to.',
-                              reply_markup=ReplyKeyboardRemove())
-
-    return PHOTO
-
-
-def photo(update, context):
-    user = update.message.from_user
-    photo_file = update.message.photo[-1].get_file()
-
-    if photo_file is not None:
-      photo_file.download('user_photo.jpg')
-
-    logger.info("Photo of %s: %s", user.first_name, 'user_photo.jpg')
-    update.message.reply_text('Gorgeous! Now, send me your location please, '
-                              'or send /skip if you don\'t want to.')
-
-    return BIO
-
-
-def skip_photo(update, context):
-    user = update.message.from_user
-    logger.info("User %s did not send a photo.", user.first_name)
-    update.message.reply_text('I bet you look great! Now, send me your location please, '
-                              'or send /skip.')
-
-    return BIO
+    return LOCATION
 
 
 def location(update, context):
@@ -136,18 +103,12 @@ class Bot:
           entry_points=[CommandHandler('start', start(update_obj, self.bot))],
 
           states={
-              GENDER: [MessageHandler(Filters.regex('^(Boy|Girl|Other)$'), gender(update_obj, self.bot))],
-
-              PHOTO: [MessageHandler(Filters.photo, photo(update_obj, self.bot)),
-                      CommandHandler('skip', skip_photo(update_obj, self.bot))],
-
               LOCATION: [MessageHandler(Filters.location, location(update_obj, self.bot)),
                         CommandHandler('skip', skip_location(update_obj, self.bot))],
-
               BIO: [MessageHandler(Filters.text, bio(update_obj, self.bot))]
           },
 
           fallbacks=[CommandHandler('cancel', cancel(update_obj, self.bot))]
       )
 
-      self.dispatcher.add_handler(conv_handler)
+    self.dispatcher.add_handler(conv_handler)
