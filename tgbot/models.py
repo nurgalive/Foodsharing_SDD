@@ -4,9 +4,9 @@ from django.utils import timezone
 # Create your models here.
 class User(models.Model):
   user_id     = models.IntegerField(unique=True, primary_key=True)
-  first_name  = models.CharField(max_length=64)
-  last_name   = models.CharField(max_length=64)
-  city        = models.CharField(max_length=64)
+  first_name  = models.CharField(max_length=64, blank=True, null=True)
+  last_name   = models.CharField(max_length=64, blank=True, null=True)
+  city        = models.CharField(max_length=64, blank=True, null=True)
 
 class Category(models.Model):
   name = models.TextField(max_length=4096)
