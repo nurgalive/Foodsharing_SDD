@@ -75,9 +75,7 @@ class Bot:
 
 
   def categories(self, update, context):
-    user = self.update_obj.message.from_user
-    self.update_obj.message.reply_text(
-      'Мы отфильтруем по выбранным категориям: ' + self.update_obj.message.text)
+    self.update_obj.message.reply_text('Мы отфильтруем по выбранным категориям: ' + self.update_obj.message.text)
 
     return ConversationHandler.END
 
