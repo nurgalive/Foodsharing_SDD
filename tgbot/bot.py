@@ -151,7 +151,7 @@ class Bot:
 
     for post in posts:
       info = ''
-      if not post.city:
+      if post.city is not None:
         info = info + 'Город: ' + post.city + '\n'
       else:
         continue
