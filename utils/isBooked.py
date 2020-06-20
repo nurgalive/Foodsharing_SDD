@@ -4,7 +4,7 @@ def is_booked(text):
     processed_text = text.lower()
 
     for book_word in book_words:
-        if book_word in text:
+        if book_word in processed_text:
             return True
 
     return False

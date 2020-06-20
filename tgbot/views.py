@@ -2,6 +2,11 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseBadRequest, Http404
 from django.views.decorators.csrf import csrf_exempt
 import json
+
+from utils.getCategory import get_food_category
+from utils.gitCity import get_city
+from utils.isBooked import is_booked
+from utils.isLost import get_is_lost
 from .models import User, Message, Post, Group, Comment
 from datetime import datetime
 import vk_api
@@ -33,7 +38,7 @@ def from_vk_to_db(request):
     city = get_city(text)
     is_book = is_booked(text)
     category = get_food_category(text)
-
+    is_lost = get_is_lost(text)
 
     try:
       Post.objects.get(post_id=post_id)
@@ -49,7 +54,8 @@ def from_vk_to_db(request):
         city=city.value,
         address="Default address",
         is_book=is_book,
-        category=category
+        category=category,
+        is_lost=is_lost
       )
       result.save()
 

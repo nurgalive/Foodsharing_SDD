@@ -25,6 +25,9 @@ class Group(models.Model):
   link = models.URLField()
   city = models.TextField(max_length=32)
 
+  def __str__(self):
+      return f'{self.name}'
+
 class Post(models.Model):
   post_id = models.IntegerField(unique=True, primary_key=True)
   text = models.TextField(max_length=4096, blank=True, null=True)
@@ -35,6 +38,7 @@ class Post(models.Model):
   address = models.TextField(max_length=4096, blank=True, null=True)
   category = models.TextField(max_length=64, blank=True, null=True)
   is_book = models.BooleanField(default=False)
+  is_lost = models.BooleanField(default=False)
 
 
 class Comment(models.Model):
