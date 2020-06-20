@@ -162,7 +162,7 @@ class Bot:
     user_categories = UserToCategory.objects.filter(user=user_db)
 
     categories = list(map(lambda qs: qs.category.name, user_categories))
-    posts = Post.objects.filter(city__exact=user_db.city)
+    posts = Post.objects.filter(city__exact=user_db.city, is_book=False, is_lost=False)
     filtered_posts = []
 
     if 'Все' in categories:
