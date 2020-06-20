@@ -29,58 +29,73 @@ def from_vk_to_db(request):
 
   vk = vk_session.get_api()
 
-  for x in range(0,5):
-    post = vk.wall.get(domain="sharingfood", count=5)
-    text = post['items'][x]['text']
-    date = post['items'][x]['date']
-    post_id = post['items'][x]['id']
-    group_id = post['items'][x]['owner_id']
-    city = get_city(text)
-    is_book = get_is_booked(text)
-    category = get_food_category(text)
-    is_lost = get_is_lost(text)
-    metro = get_metro_station(text)
+  groups = Group.objects.all()
+  for group in groups:g
+    domain = group.link[15:len(group.link)]
+    for x in range(0,5):
+      post = vk.wall.get(domain=domain, count=5)
+      text = post['items'][x]['text']
+      date = post['items'][x]['date']
+      post_id = post['items'][x]['id']
+      group_id = post['items'][x]['owner_id']
+      city = get_city(text)
+      is_book = get_is_booked(text)
+      category = get_food_category(text)
+      is_lost = get_is_lost(text)
+      metro = get_metro_station(text)
 
-    try:
-      Post.objects.get(post_id=post_id)
-    except:
-      group_id = group_id * -1
-      group = Group.objects.get(group_id=group_id)
+      print(post_id)
 
-      comments = vk.wall.getComments(owner_id=group_id, post_id=post_id, count=100, sort='asc')
+      #       try:
+      #   Post.objects.filter(post_id=post_id)
+      # except:
 
-      count = comments['current_level_count']
-      big_comment = ""
-      for x in range(0,count):
-        try:
-          comments['items'][x]['deleted'] == True
-          continue
-        except:
-          text = comments['items'][x]['text']
-          #print(text)
-          big_comment = big_comment + text + " "
+      if Post.objects.filter(post_id = post_id).exists():
+        continue
+      else:
+        group_id = group_id * -1
+        group = Group.objects.get(group_id=group_id)
 
-      # last comment id
-      last_comment_id = comments['items'][count-1]['id']
-      # resulted comment
-      #print(big_comment)
-      is_book_from_comment = get_is_booked(big_comment)
-      is_lost_from_comment = get_is_lost(big_comment)
+        group_id = group_id * -1
+        comments = vk.wall.getComments(owner_id=group_id, post_id=post_id, count=100, sort='asc')
 
-      result = Post.objects.create(
-        post_id=post_id,
-        text=text,
-        posted_date=datetime.fromtimestamp(int(date)),
-        link="https://vk.com/sharingfood?w=wall-"+str(group_id)+"_"+str(post_id)+"%2Fall",
-        group_id=group,
-        city=city.value,
-        address="Default address",
-        is_book=is_book | is_book_from_comment,
-        category=category,
-        is_lost=is_lost | is_lost_from_comment,
-        metro=metro
-      )
-      result.save()
+        count = comments['current_level_count']
+        big_comment = ""
+        for x in range(0,count):
+          try:
+            comments['items'][x]['deleted'] == True
+            continue
+          except:
+            try:
+             text = comments['items'][x]['text']
+             big_comment = big_comment + text + " "
+            except IndexError:
+              continue
+
+            #print(text)
+              
+
+        # last comment id
+        #last_comment_id = comments['items'][count-1]['id']
+        # resulted comment
+        #print(big_comment)
+        is_book_from_comment = get_is_booked(big_comment)
+        is_lost_from_comment = get_is_lost(big_comment)
+
+        result = Post.objects.create(
+          post_id=post_id,
+          text=text,
+          posted_date=datetime.fromtimestamp(int(date)),
+          link="https://vk.com/"+domain+"?w=wall-"+str(group_id)+"_"+str(post_id),
+          group_id=group,
+          city=city.value,
+          address="Default address",
+          is_book=is_book | is_book_from_comment,
+          category=category,
+          is_lost=is_lost | is_lost_from_comment,
+          metro=metro
+        )
+        result.save()
 
   return redirect('home')
 
