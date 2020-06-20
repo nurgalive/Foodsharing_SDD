@@ -109,7 +109,7 @@ def from_vk_to_db(request):
           post_id=post_id,
           text=text,
           posted_date=datetime.fromtimestamp(int(date)),
-          link="https://vk.com/"+domain+"?w=wall-"+str(group_id)+"_"+str(post_id),
+          link="https://vk.com/"+domain+"?w=wall"+str(group_id)+"_"+str(post_id),
           group_id=group,
           city=city.value,
           address="Default address",
