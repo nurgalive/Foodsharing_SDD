@@ -1,7 +1,7 @@
 from django.conf import settings
 
 from telegram import Bot as TelegramBot, Update
-from telegram.ext import Dispatcher, Updater
+from telegram.ext import Dispatcher, Updater, CallbackContext
 
 import logging
 
@@ -50,7 +50,10 @@ class Bot:
     )
 
     self.dispatcher.add_handler(conv_handler)
+    self.dispatcher.add_error_handler(self.error_handler)
 
+  def error_handler(update: Update, context: CallbackContext):
+    print('Error!', context.error)
 
   def start(self, update, context):
     reply_keyboard = [['Москва', 'Санкт-Петербург']]
@@ -65,7 +68,7 @@ class Bot:
 
   def cities(self, update, context):
     user = self.update_obj.message.from_user
-    reply_keyboard = [['Все', *categories[:MAX_CATEGORIES], show_more_text]]
+    reply_keyboard = [['Все', *categories[:MAX_CATEGORIES], f'{show_more_text}_1']]
 
     selected_city = self.update_obj.message.text
     user_db = User.objects.filter(user_id__exact=str(user.id))
@@ -83,13 +86,19 @@ class Bot:
     return CATEGORIES
 
 
-  def categories(self, update, context):
+  def categories(self, update: Update, context: CallbackContext):
     category = self.update_obj.message.text
-    start = MAX_CATEGORIES
-    end = MAX_CATEGORIES + MAX_CATEGORIES
+    offset = 0
+
+    if show_more_text in category:
+      _, parsed_offset = category.split('_')
+      offset = int(parsed_offset)
+
+    start = offset * MAX_CATEGORIES
+    end = offset * MAX_CATEGORIES + MAX_CATEGORIES
 
     if category == show_more_text:
-      reply_keyboard = [['Все', *categories[start:end], show_more_text]]
+      reply_keyboard = [['Все', *categories[start:end], f'{show_more_text}_{offset+1}']]
 
       if len(categories) < end:
         reply_keyboard = [['Все', *categories[start:end]]]
