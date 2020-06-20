@@ -64,6 +64,8 @@ def from_vk_to_db(request):
       last_comment_id = comments['items'][count-1]['id']
       # resulted comment
       #print(big_comment)
+      is_book_from_comment = get_is_booked(big_comment)
+      is_lost_from_comment = get_is_lost(big_comment)
 
       result = Post.objects.create(
         post_id=post_id,
@@ -73,9 +75,9 @@ def from_vk_to_db(request):
         group_id=group,
         city=city.value,
         address="Default address",
-        is_book=is_book,
+        is_book=is_book | is_book_from_comment,
         category=category,
-        is_lost=is_lost,
+        is_lost=is_lost | is_lost_from_comment,
         metro=metro
       )
       result.save()
