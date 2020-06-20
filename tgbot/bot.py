@@ -42,7 +42,7 @@ class Bot:
         entry_points=[CommandHandler('start', self.start)],
 
         states={
-          CITIES:     [MessageHandler(Filters.regex('^(Москва|Cпб)$'), self.categories]
+          CITIES:     [MessageHandler(Filters.regex('^(Москва|Cпб)$'), self.cities)],
           CATEGORIES: [MessageHandler(Filters.regex('^(Все|Молоко|Хлеб)$'), self.categories)],
         },
 
