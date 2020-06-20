@@ -45,7 +45,7 @@ class Bot:
 
       states={
         CITIES:     [MessageHandler(Filters.regex('^(Москва|Санкт-Петербург)$'), self.cities)],
-        CATEGORIES: [MessageHandler(Filters.regex(f'^(Все|{("|").join(categories)}|{show_more_text})$'), self.categories)],
+        CATEGORIES: [MessageHandler(Filters.regex(f'^(Все|{("|").join(categories)}|{show_more_text}_\d)$'), self.categories)],
       },
 
       fallbacks=[CommandHandler('cancel', self.cancel)]

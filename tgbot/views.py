@@ -4,7 +4,7 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 
 from utils.getCategory import get_food_category, all_cats
-from utils.gitCity import get_city
+from utils.gitCity import get_city, get_metro_station
 from utils.getIsBooked import get_is_booked
 from utils.getIsLost import get_is_lost
 from .models import User, Message, Post, Group, Comment, Category
@@ -38,6 +38,7 @@ def from_vk_to_db(request):
     is_book = get_is_booked(text)
     category = get_food_category(text)
     is_lost = get_is_lost(text)
+    metro = get_metro_station(text)
 
     try:
       Post.objects.get(post_id=post_id)
@@ -54,7 +55,8 @@ def from_vk_to_db(request):
         address="Default address",
         is_book=is_book,
         category=category,
-        is_lost=is_lost
+        is_lost=is_lost,
+        metro=metro
       )
       result.save()
 
