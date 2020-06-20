@@ -60,11 +60,13 @@ def from_vk_to_db(request):
 
   return redirect('home')
 
-def upload_cats_to_db():
+def upload_cats_to_db(request):
   for category in all_cats:
     if Category.objects.filter(name__exact=category).count() == 0:
       result = Category.objects.create(name=category)
       result.save()
+
+  return redirect('home')
 
 @csrf_exempt
 def webhook(request, token):
