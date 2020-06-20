@@ -119,12 +119,14 @@ class Bot:
       info = ''
       if post.city is not None:
         info = info + 'Город: ' + post.city + '\n'
+      else
+        continue
 
       if post.metro is not None:
         info = info + 'Метро: ' + post.metro + '\n'
 
       if post.address is not None:
-        info = info + 'Адрес: ' + post.metro + '\n'
+        info = info + 'Адрес: ' + post.address + '\n'
 
       self.update_obj.message.reply_text(
         '' + info + '\n\n'
