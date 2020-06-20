@@ -109,7 +109,6 @@ class Bot:
       # if settings.DEBUG:
       self.updater = Updater(token)
       self.dispatcher = self.updater.dispatcher
-
           
       # else:
       # self.bot.set_webhook('{}/{}/{}/'.format(url, 'bot', token))
@@ -138,7 +137,6 @@ class Bot:
       self.dispatcher.add_handler(conv_handler)
 
       self.updater.start_polling()
-      self.updater.idle()
 
     # def register(self, handler):
     #   handler.register(self.dispatcher)
