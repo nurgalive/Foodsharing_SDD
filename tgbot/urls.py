@@ -1,6 +1,8 @@
-from django.urls import path
+from django.urls import re_path
 from . import views
 
+from .views import webhook_message
+
 urlpatterns = [
-  path('webhook/', views.webhook_message),
+  re_path(r'webhook/(?P<token>.+)/', webhook_message),
 ]
