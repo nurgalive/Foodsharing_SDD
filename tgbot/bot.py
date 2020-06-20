@@ -141,13 +141,13 @@ class Bot:
               PHOTO: [MessageHandler(Filters.photo, photo(update_obj, self.bot)),
                       CommandHandler('skip', skip_photo(update_obj, self.bot))],
 
-              LOCATION: [MessageHandler(Filters.location, location(update_obj, self.bot(update_obj, self.bot))),
-                        CommandHandler('skip', skip_location(update_obj, self.bot(update_obj, self.bot)))],
+              LOCATION: [MessageHandler(Filters.location, location(update_obj, self.bot)),
+                        CommandHandler('skip', skip_location(update_obj, self.bot))],
 
-              BIO: [MessageHandler(Filters.text, bio)]
+              BIO: [MessageHandler(Filters.text, bio(update_obj, self.bot))]
           },
 
-          fallbacks=[CommandHandler('cancel', cancel)]
+          fallbacks=[CommandHandler('cancel', cancel(update_obj, self.bot))]
       )
 
       self.dispatcher.add_handler(conv_handler)
