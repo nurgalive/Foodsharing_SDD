@@ -39,8 +39,8 @@ class Bot:
 
     self.update_obj = None
 
-    # Add conversation handler with the states GENDER, PHOTO, LOCATION and BIO
-    conv_handler = ConversationHandler(
+    # Хендлер регистрации с состояниями CITIES and CATEGORIES
+    register_handler = ConversationHandler(
       entry_points=[CommandHandler('start', self.start)],
 
       states={
@@ -51,7 +51,15 @@ class Bot:
       fallbacks=[CommandHandler('cancel', self.cancel)]
     )
 
-    self.dispatcher.add_handler(conv_handler)
+    # Хендлер поиска
+    search_handler = ConversationHandler(
+      entry_points=[CommandHandler('search', self.search)],
+
+      fallbacks=[CommandHandler('cancel', self.cancel)]
+    )
+
+    self.dispatcher.add_handler(register_handler)
+    self.dispatcher.add_handler(search_handler)
     self.dispatcher.add_error_handler(self.error_handler)
 
   def error_handler(self, update: Update, context: CallbackContext):
@@ -142,6 +150,32 @@ class Bot:
     user = self.update_obj.message.from_user
     self.update_obj.message.reply_text('До встречи, ' + user.first_name,
       reply_markup=ReplyKeyboardRemove())
+
+    return ConversationHandler.END
+
+  def search(self, update, context):
+    user = self.update_obj.message.from_user
+    user_db = User.objects.filter(user_id__exact=str(user.id)).get()
+
+    posts = Post.objects.filter(city__exact=user_db.city)
+
+    for post in posts:
+      info = ''
+      if post.city is not None:
+        info = info + 'Город: ' + post.city + '\n'
+      else:
+        continue
+
+      if post.metro is not 'unknown':
+        info = info + 'Метро: ' + post.metro + '\n'
+
+      if post.address is not None:
+        info = info + 'Адрес: ' + post.address + '\n'
+
+      self.update_obj.message.reply_text(
+        '' + info + '\n\n'
+                    'Ссылка на пост: ' + post.link + ''
+      )
 
     return ConversationHandler.END
 
