@@ -116,7 +116,7 @@ class Bot:
 
       # Add conversation handler with the states GENDER, PHOTO, LOCATION and BIO
       conv_handler = ConversationHandler(
-          entry_points=[CommandHandler('start', start],
+          entry_points=[CommandHandler('start', start)],
 
           states={
               GENDER: [MessageHandler(Filters.regex('^(Boy|Girl|Other)$'), gender)],
