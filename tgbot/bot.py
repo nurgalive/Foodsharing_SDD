@@ -158,18 +158,11 @@ class Bot:
     user_db = User.objects.filter(user_id__exact=str(user.id)).get()
     user_categories = UserToCategory.objects.filter(user=user_db)
     #categories_db = Category.objects.filter(id=user_categories.category)
-    for qs in user_categories:
-      print(qs.category.name)
 
     categories = map(lambda qs: qs.category.name, user_categories)
+    posts = Post.objects.filter(city__exact=user_db.city)
 
-    posts = []
-    if 'Все' in categories:
-      posts.append(Post.objects.filter(city__exact=user_db.city))
-    else:
-      posts.append(Post.objects.filter(city__exact=user_db.city, category__exact=categories))
-
-    for post in posts[:5]:
+    for post in posts:
       info = ''
       if post.city is not None:
         info = info + '\nГород: ' + post.city + '\n'
