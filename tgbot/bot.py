@@ -54,7 +54,7 @@ class Bot:
     # Хендлер поиска
     search_handler = ConversationHandler(
       entry_points=[CommandHandler('search', self.search)],
-
+      states={},
       fallbacks=[CommandHandler('cancel', self.cancel)]
     )
 
