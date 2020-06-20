@@ -12,7 +12,7 @@ from telegram import Bot as TelegramBot
 @csrf_exempt
 def webhook(request, token):
     bot = TgbotConfig.registry.get_bot(token)
-    if bot is not None:
+    if bot is None:
       bot = TelegramBot(token)
       TgbotConfig.registry.add_bot(token, bot)
     
