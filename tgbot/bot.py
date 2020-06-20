@@ -71,7 +71,7 @@ class Bot:
       'Выбери интересующие категории продуктов ',
       reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True))
 
-    return ConversationHandler.END
+    return CATEGORIES
 
 
   def categories(self, update, context):
