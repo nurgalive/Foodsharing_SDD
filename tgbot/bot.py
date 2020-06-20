@@ -84,7 +84,7 @@ def skip_photo(update, context):
 def bio(update, context):
     user = update.message.from_user
     logger.info("Bio of %s: %s", user.first_name, update.message.text)
-    update.message.text('Thank you! I hope we can talk again some day.')
+    update.message.reply_text('Thank you! I hope we can talk again some day.')
 
     return ConversationHandler.END
 
