@@ -28,8 +28,6 @@ show_more_text = 'Ещё'
 class Bot:
   def __init__(self, token, url='edudam.herokuapp.com'):
     self.bot = TelegramBot(token)
-
-    self.category_offset = 0
     
     self.dispatcher = None
 
@@ -68,7 +66,6 @@ class Bot:
   def cities(self, update, context):
     user = self.update_obj.message.from_user
     reply_keyboard = [['Все', *categories[:MAX_CATEGORIES], show_more_text]]
-    self.category_offset = 1
 
     selected_city = self.update_obj.message.text
     user_db = User.objects.filter(user_id__exact=str(user.id))
@@ -88,9 +85,8 @@ class Bot:
 
   def categories(self, update, context):
     category = self.update_obj.message.text
-    start = self.category_offset * MAX_CATEGORIES
-    end = self.category_offset * MAX_CATEGORIES + MAX_CATEGORIES
-    self.category_offset += 1
+    start = MAX_CATEGORIES
+    end = MAX_CATEGORIES + MAX_CATEGORIES
 
     if category == show_more_text:
       reply_keyboard = [['Все', *categories[start:end], show_more_text]]
@@ -108,7 +104,6 @@ class Bot:
     self.update_obj.message.reply_text(
       'Мы отфильтруем по выбранным категориям: ' + category,
       reply_markup=ReplyKeyboardRemove())
-    self.category_offset = 0
 
     posts = Post.objects.all()
 
@@ -124,7 +119,6 @@ class Bot:
     user = self.update_obj.message.from_user
     self.update_obj.message.reply_text('До встречи, ' + user.first_name,
       reply_markup=ReplyKeyboardRemove())
-    self.category_offset = 0
 
     return ConversationHandler.END
 
