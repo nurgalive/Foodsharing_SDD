@@ -160,7 +160,7 @@ def webhook(request, token):
   # ).save()
   
   bot.webhook(json.loads(request.body.decode('utf-8')))
-
+  return HttpResponse('OK')
   # if result is True:
   #   if bot is not None:
   #     bot.webhook(json.loads(request.body.decode('utf-8')))
