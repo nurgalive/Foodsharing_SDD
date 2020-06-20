@@ -21,9 +21,15 @@ logger = logging.getLogger(__name__)
 
 CATEGORIES, CITIES = range(2)
 
+categories = all_cats.keys()
+MAX_CATEGORIES = 5
+show_more_text = 'Ещё'
+
 class Bot:
   def __init__(self, token, url='edudam.herokuapp.com'):
     self.bot = TelegramBot(token)
+
+    self.category_offset = 0
     
     self.dispatcher = None
 
@@ -61,7 +67,8 @@ class Bot:
 
   def cities(self, update, context):
     user = self.update_obj.message.from_user
-    reply_keyboard = [['Все', *all_cats.keys()]]
+    reply_keyboard = [['Все', *categories[:MAX_CATEGORIES], show_more_text]]
+    self.category_offset = 1
 
     selected_city = self.update_obj.message.text
     user_db = User.objects.filter(user_id__exact=str(user.id))
@@ -80,8 +87,23 @@ class Bot:
 
 
   def categories(self, update, context):
+    category = self.update_obj.message.text
+    start = self.category_offset * MAX_CATEGORIES
+    end = self.category_offset * MAX_CATEGORIES + MAX_CATEGORIES
+
+    if category == show_more_text & len(categories) < end:
+      reply_keyboard = [['Все', *categories[start:end], show_more_text]]
+      self.category_offset += 1
+
+      self.update_obj.message.reply_text(
+        'Выбери интересующие категории продуктов ',
+        reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True)
+      )
+
+      return CATEGORIES
+
     self.update_obj.message.reply_text(
-      'Мы отфильтруем по выбранным категориям: ' + self.update_obj.message.text,
+      'Мы отфильтруем по выбранным категориям: ' + category,
       reply_markup=ReplyKeyboardRemove())
 
     return ConversationHandler.END
