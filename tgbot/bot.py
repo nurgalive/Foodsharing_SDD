@@ -51,10 +51,10 @@ class Bot:
     self.dispatcher.add_handler(conv_handler)
 
 
-  def start(self, context):
+  def start(self, update, context):
     reply_keyboard = [['Москва', 'Спб']]
 
-    self.update_obj.message.reply_text(
+    update.message.reply_text(
       'Привет! Это бот едудам. Поговори со мной. '
       'Отправь /cancel чтобы остановить разговор со мной.\n\n'
       'Выбери город',
@@ -63,21 +63,21 @@ class Bot:
     return CATEGORIES
 
 
-  def categories(self, context):
+  def categories(self, update, context):
     reply_keyboard = [['Все', 'Молоко', "Хлеб"]]
-    user = self.update_obj.message.from_user
+    user = update.message.from_user
 
-    self.update_obj.message.reply_text(
+    update.message.reply_text(
       'Выбери интересующие категории продуктов',
       reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True))
 
     return ConversationHandler.END
 
 
-  def cancel(self, context):
-    user = self.update_obj.message.from_user
+  def cancel(self, update, context):
+    user = update.message.from_user
     logger.info("User %s canceled the conversation.", user.first_name)
-    self.update_obj.message.reply_text('Bye! I hope we can talk again some day.',
+    update.message.reply_text('Bye! I hope we can talk again some day.',
                               reply_markup=ReplyKeyboardRemove())
 
     return ConversationHandler.END
