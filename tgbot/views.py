@@ -99,17 +99,17 @@ def webhook(request, token):
     TgbotConfig.registry.add_bot(token, bot)
 
   try:
-    json_message = json.loads(request.body)
+    json_message = json.loads(json.loads(request.body.decode('utf-8')))
   except json.decoder.JSONDecodeError as err:
     return HttpResponse(str(err))
 
   try:
-    result = MessageAndUserFromWebhookJSON.new.save(json_message)
+    result = MessageAndUserFromWebhookJSON().save(json_message)
   except ValueError as e:
     return HttpResponseBadRequest(str(e))
   if result is True:
     if bot is not None:
-      bot.webhook(json.loads(request.body.decode('utf-8')))
+      bot.webhook(json_message)
       return HttpResponse('OK')
     else:
       raise Http404
