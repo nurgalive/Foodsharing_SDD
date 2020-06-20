@@ -156,8 +156,14 @@ class Bot:
   def search(self, update, context):
     user = self.update_obj.message.from_user
     user_db = User.objects.filter(user_id__exact=str(user.id)).get()
+    user_categories = UserToCategory.objects.filter(user=user_db)
+    categories = map(lambda cat: cat.name, user_categories)
 
-    posts = Post.objects.filter(city__exact=user_db.city)
+    posts = []
+    if 'Все' in categories:
+      posts.append(Post.objects.filter(city__exact=user_db.city))
+    else:
+      posts.append(Post.objects.filter(city__exact=user_db.city, category__exact=categories))
 
     for post in posts:
       info = ''
