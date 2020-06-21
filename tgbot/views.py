@@ -71,7 +71,8 @@ def notify_users(request):
 
       if post.address != 'Default address':
         info = info + 'Адрес: ' + post.address + '\n'
-        info =  info + '\n' + 'Ссылка на пост: ' + post.link + ''
+        
+      info = info + '\n' + 'Ссылка на пост: ' + post.link + ''
 
 
     send_message(bot, user.user_id, info)
