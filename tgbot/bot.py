@@ -177,7 +177,7 @@ class Bot:
       for post in posts:
         if post.category in categories:
           filtered_posts.append(post)
-    print(filtered_posts)
+    #print(filtered_posts)
 
     if len(filtered_posts) == 0:
       self.update_obj.message.reply_text('Ни одного поста не найдено')

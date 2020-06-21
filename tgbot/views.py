@@ -7,7 +7,7 @@ from utils.getCategory import get_food_category, all_cats
 from utils.gitCity import get_city, get_metro_station
 from utils.getIsBooked import get_is_booked
 from utils.getIsLost import get_is_lost
-from .models import User, Message, Post, Group, Comment, Category
+from .models import User, Message, Post, Group, Comment, Category, UserToCategory
 from datetime import datetime
 import vk_api
 
@@ -30,11 +30,51 @@ def notify_users(request):
     #print(self.bot.send_message(chat_id=42737369, text="Хэй, бро!"))
 
   #message = "Хэй, бро!"
-  def send_message(self, message):
-    self.bot.send_message(chat_id=42737369, text=message)
-    self.bot.send_message(chat_id=217254731, text=message)
+  def send_message(self, chat_id, message):
+    self.bot.send_message(chat_id=chat_id, text=message)
+    #self.bot.send_message(chat_id=42737369, text=message)
+    #self.bot.send_message(chat_id=217254731, text=message)
 
-  send_message(bot, "Хэй, бро!")
+  users = User.objects.all()
+  for user in users:
+    
+    user_db = User.objects.filter(user_id__exact=str(user.user_id)).get()
+    user_categories = UserToCategory.objects.filter(user=user_db)
+    user_categories = UserToCategory.objects.filter(user=user_db)
+    categories = list(map(lambda qs: qs.category.name, user_categories))
+    posts = Post.objects.filter(city__exact=user_db.city, is_book=False, is_lost=False)
+    filtered_posts = []
+      
+    if 'Все' in categories:
+      filtered_posts = posts
+    else:
+      for post in posts:
+        if post.category in categories:
+          filtered_posts.append(post)
+    print(filtered_posts)
+
+    if len(filtered_posts) == 0:
+      continue
+
+    for post in filtered_posts:
+      info = ''
+      if post.city is not None:
+        info = info + '\nГород: ' + post.city + '\n'
+      else:
+        continue
+
+      if post.category != 'unknown':
+        info = info + 'Категория: ' + post.category + '\n'
+
+      if post.metro != 'unknown':
+        info = info + 'Метро: ' + post.metro + '\n'
+
+      if post.address != 'Default address':
+        info = info + 'Адрес: ' + post.address + '\n'
+        info =  info + '\n' + 'Ссылка на пост: ' + post.link + ''
+
+
+    send_message(bot, user.user_id, info)
 
   #bot.send_message(chat_id=42737369, text="Хэй, бро!")
   #bot.send_message(chat_id=217254731, text="Хэй, бро!")
