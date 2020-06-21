@@ -91,7 +91,7 @@ def from_vk_to_db(request):
   for group in groups:
     domain = group.link[15:len(group.link)]
     posts = vk.wall.get(domain=domain, count=100)
-    for post in post.items:
+    for post in posts.items:
       text = post['text']
       date = post['date']
       post_id = post['id']
