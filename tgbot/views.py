@@ -90,12 +90,12 @@ def from_vk_to_db(request):
   groups = Group.objects.all()
   for group in groups:
     domain = group.link[15:len(group.link)]
-    for x in range(0,100):
-      post = vk.wall.get(domain=domain, count=100)
-      text = post['items'][x]['text']
-      date = post['items'][x]['date']
-      post_id = post['items'][x]['id']
-      group_id = post['items'][x]['owner_id']
+    posts = vk.wall.get(domain=domain, count=100)
+    for post in post.items:
+      text = post['text']
+      date = post['date']
+      post_id = post['id']
+      group_id = post['owner_id']
       city = get_city(text)
       is_book = get_is_booked(text)
       category = get_food_category(text)
