@@ -1,6 +1,7 @@
 {% extends 'tgbot/base.html' %}
 
 {% block content %}
+<h3>Всего постов: {{ all_posts }}</h3>
 <h3>Разбивка по категориям</h3>
 {% for cat in category_stats %}
     <p>Категория: {{ cat.cat }}, количество: {{ cat.val }}</p>

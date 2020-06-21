@@ -206,6 +206,7 @@ def analytic(request):
     'post_without_category': post_without_category,
     'booked_postst': booked_postst,
     'lost_posts': lost_posts,
+    'all_posts': posts.count(),
   })
 
 def upload_cats_to_db(request):
