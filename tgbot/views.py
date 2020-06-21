@@ -194,9 +194,9 @@ def analytic(request):
   post_from_spb = Post.objects.filter(city__exact='Санкт-Петербург').count()
   post_from_nowhere = Post.objects.filter(city__exact='Неизвестно').count()
 
-  post_without_category = Post.objects.filter(category__exact='unknow').count()
-  booked_postst = Post.objects.filter(category__exact='unknow').count()
-  lost_posts = Post.objects.filter(category__exact='unknow').count()
+  post_without_category = Post.objects.filter(category__exact='unknown').count()
+  booked_postst = Post.objects.filter(is_book__exact=True).count()
+  lost_posts = Post.objects.filter(is_lost__exact=True).count()
 
   return render(request, 'tgbot/analytic.html', {
     'category_stats': category_stats_arr,
