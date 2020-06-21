@@ -49,7 +49,7 @@ utils:
 
 ## Ссылки на проект
 
-* [Telegram bot](https://www.example.com)
+* [Telegram bot](https://t.me/edudam_bot)
 * [Веб-страница](https://edudam.herokuapp.com/)
-* [Аналитика](http://edudam.herokuapp.com/analytic)
+* [Аналитика](https://edudam.herokuapp.com/analytic)
 
