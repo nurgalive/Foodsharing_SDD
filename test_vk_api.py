@@ -3,7 +3,7 @@ from pprint import pprint
 from datetime import datetime
 
 
-login, password = '+4915205901185', '78ododad'
+login, password = '***', '****'
 vk_session = vk_api.VkApi(login, password)
 try:
         vk_session.auth()

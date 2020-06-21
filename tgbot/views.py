@@ -15,6 +15,12 @@ from .apps import TgbotConfig
 from .services import MessageAndUserFromWebhookJSON
 from .bot import Bot
 
+import os
+
+VK_LOGIN = os.environ['VK_LOGIN']
+VK_PASS = os.environ['VK_PASS']
+BOT_TOKEN = os.environ['BOT_TOKEN']
+
 def home(request):
   posts = Post.objects.all()
   return render(request, 'tgbot/home.html', {'posts' : posts})
@@ -22,7 +28,9 @@ def home(request):
 # Уведомление пользователей c фильтрацией постов о новом посте в группе,
 # на данный момент нет асинхронной задачи, но это сделано для наглядкости
 def notify_users(request):
-  token = "1264768775:AAHvmoU7AZTvcL4ljxIDD78y048Rs5okQKU"
+
+  #bot token
+  token = BOT_TOKEN
   bot = TgbotConfig.registry.get_bot(token)
   
   if bot is None:
@@ -78,7 +86,7 @@ def notify_users(request):
 
 # Парсинг поста из ВК, морфологический разбор и ТП
 def from_vk_to_db(request):
-  login, password = '+4915205901185', '78ododad'
+  login, password = VK_PASS, VK_PASS
   vk_session = vk_api.VkApi(login, password)
   try:
     vk_session.auth()

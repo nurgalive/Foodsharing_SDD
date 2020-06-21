@@ -13,6 +13,17 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 import os
 import django_heroku
 
+DEBUG = os.environ.get('DEBUG', None)
+if DEBUG is None:
+    DEBUG = False
+else:
+    if 'true' == DEBUG.lower():
+        DEBUG = True
+    else:
+        DEBUG = False
+
+SECRET_KEY = os.environ['SECRET_KEY']
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -21,7 +32,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'z!$fa7ig-n*bkz!mb1zw@7sy_acc4t^sx(4406=0dkg+wb!_8n'
+#SECRET_KEY = ''
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
