@@ -43,6 +43,7 @@ class Bot:
 
     help_handler = CommandHandler('help', self.help)
     start_handler = CommandHandler('start', self.start)
+    cancel_handler = CommandHandler('cancel', self.cancel)
 
     city_handler = CommandHandler('city', self.set_city)
     category_handler = CommandHandler('category', self.set_category)
@@ -55,6 +56,7 @@ class Bot:
 
     self.dispatcher.add_handler(help_handler)
     self.dispatcher.add_handler(start_handler)
+    self.dispatcher.add_handler(cancel_handler)
     self.dispatcher.add_handler(city_handler)
     self.dispatcher.add_handler(category_handler)
     self.dispatcher.add_handler(set_city_handler)
