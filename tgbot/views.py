@@ -4,7 +4,7 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 
 from utils.getCategory import get_food_category, all_cats
-from utils.gitCity import get_city, get_metro_station
+from utils.getCity import get_city, get_metro_station
 from utils.getIsBooked import get_is_booked
 from utils.getIsLost import get_is_lost
 from .models import User, Message, Post, Group, Comment, Category, UserToCategory
@@ -19,6 +19,8 @@ def home(request):
   posts = Post.objects.all()
   return render(request, 'tgbot/home.html', {'posts' : posts})
 
+# Уведомление пользователей c фильтрацией постов о новом посте в группе,
+# на данный момент нет асинхронной задачи, но это сделано для наглядкости
 def notify_users(request):
   token = "1264768775:AAHvmoU7AZTvcL4ljxIDD78y048Rs5okQKU"
   bot = TgbotConfig.registry.get_bot(token)
@@ -27,13 +29,8 @@ def notify_users(request):
     bot = Bot(token)
     TgbotConfig.registry.add_bot(token, bot)
 
-    #print(self.bot.send_message(chat_id=42737369, text="Хэй, бро!"))
-
-  #message = "Хэй, бро!"
   def send_message(self, chat_id, message):
     self.bot.send_message(chat_id=chat_id, text=message)
-    #self.bot.send_message(chat_id=42737369, text=message)
-    #self.bot.send_message(chat_id=217254731, text=message)
 
   users = User.objects.all()
   for user in users:
@@ -77,12 +74,9 @@ def notify_users(request):
 
     send_message(bot, user.user_id, info)
 
-  #bot.send_message(chat_id=42737369, text="Хэй, бро!")
-  #bot.send_message(chat_id=217254731, text="Хэй, бро!")
-
   return redirect('home')
 
-
+# Парсинг поста из ВК, морфологический разбор и ТП
 def from_vk_to_db(request):
   login, password = '+4915205901185', '78ododad'
   vk_session = vk_api.VkApi(login, password)
@@ -108,12 +102,6 @@ def from_vk_to_db(request):
       is_lost = get_is_lost(text)
       metro = get_metro_station(text)
 
-      #print(post_id)
-
-      #       try:
-      #   Post.objects.filter(post_id=post_id)
-      # except:
-
       if Post.objects.filter(post_id = post_id).exists():
         continue
       else:
@@ -136,13 +124,6 @@ def from_vk_to_db(request):
             except IndexError:
               continue
 
-            #print(text)
-              
-
-        # last comment id
-        #last_comment_id = comments['items'][count-1]['id']
-        # resulted comment
-        #print(big_comment)
         is_book_from_comment = get_is_booked(big_comment)
         is_lost_from_comment = get_is_lost(big_comment)
 
@@ -163,14 +144,7 @@ def from_vk_to_db(request):
 
   return redirect('home')
 
-def upload_cats_to_db(request):
-  for category in all_cats:
-    if Category.objects.filter(name__exact=category).count() == 0:
-      result = Category.objects.create(name=category)
-      result.save()
-
-  return redirect('home')
-
+# Вебхук для обработка запросов от бота
 @csrf_exempt
 def webhook(request, token):
   bot = TgbotConfig.registry.get_bot(token)
@@ -198,6 +172,7 @@ def webhook(request, token):
   else:
     return HttpResponseBadRequest('Malformed or incomplete JSON data received')
 
+# Анализ постов и рендер страницы
 def analytic(request):
   posts = Post.objects.all()
   category_stats = {}
@@ -232,3 +207,11 @@ def analytic(request):
     'booked_postst': booked_postst,
     'lost_posts': lost_posts,
   })
+
+def upload_cats_to_db(request):
+  for category in all_cats:
+    if Category.objects.filter(name__exact=category).count() == 0:
+      result = Category.objects.create(name=category)
+      result.save()
+
+  return redirect('home')

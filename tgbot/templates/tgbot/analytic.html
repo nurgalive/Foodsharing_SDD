@@ -19,6 +19,7 @@
 <div id="other"></div>
 
 <script>
+    // передаем код на клиент и формируем графики
     category_stats = {{% for cat in category_stats %}
         '{{ cat.cat }}': {{ cat.val}},
     {% endfor %}}

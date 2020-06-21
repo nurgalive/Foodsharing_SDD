@@ -26,7 +26,9 @@ categories = list(all_cats.keys())
 MAX_CATEGORIES = 5
 show_more_text = 'Ещё'
 
+# Основной класс для бота для телеграма
 class Bot:
+  # Инициализация бота, регистрация хендлеров
   def __init__(self, token, url='edudam.herokuapp.com'):
     self.bot = TelegramBot(token)
     
@@ -63,6 +65,7 @@ class Bot:
   def error_handler(self, update: Update, context: CallbackContext):
     print('Error!', context.error)
 
+  # Приветственный хендлер
   def start(self, update, context):
     self.update_obj.message.reply_text(
       'Привет! Это бот едудам. Поговори со мной. '
@@ -79,6 +82,7 @@ class Bot:
       'Отправь /search чтобы искать объявления.\n'
     )
 
+  # Хендлер для выбора города
   def set_city(self, update, context):
     reply_keyboard = [['Москва', 'Санкт-Петербург']]
 
@@ -87,6 +91,7 @@ class Bot:
       reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True)
     )
 
+  # Хендлер для выбора категории
   def set_category(self, update, context):
     reply_keyboard = [['Все', *categories[:MAX_CATEGORIES], f'{show_more_text}_1']]
 
@@ -95,6 +100,7 @@ class Bot:
       reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True)
     )
 
+  # Хендлер для уведомления пользователя, что город выбран
   def cities(self, update, context):
     user = self.update_obj.message.from_user
 
@@ -110,7 +116,7 @@ class Bot:
       'Твой город: ' + selected_city + '\n\n'
     )
 
-
+  # Хендлер для уведомления пользователя, что категория
   def categories(self, update: Update, context: CallbackContext):
     category = self.update_obj.message.text
 
@@ -162,6 +168,7 @@ class Bot:
 
     return ConversationHandler.END
 
+  # Хендлер для поиска постов для юзера
   def search(self, update, context):
     user = self.update_obj.message.from_user
     user_db = User.objects.filter(user_id__exact=str(user.id)).get()

@@ -1,6 +1,7 @@
 from .models import User, Message
 from datetime import datetime
 
+# Класс для сохранения информации о юзере и сообщении в БД
 class MessageAndUserFromWebhookJSON:
   def save(self, json_dict: dict) -> (None, True):
     try:

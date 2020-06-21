@@ -2,6 +2,7 @@ from django.urls import re_path, path
 from . import views
 from .views import webhook
 
+# Список страниц и эндпоинтов приложения
 urlpatterns = [
   path('', views.home, name='home'),
   path('analytic', views.analytic, name='analytic'),
