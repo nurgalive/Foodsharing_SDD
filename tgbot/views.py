@@ -38,7 +38,11 @@ def notify_users(request):
     TgbotConfig.registry.add_bot(token, bot)
 
   def send_message(self, chat_id, message):
-    self.bot.send_message(chat_id=chat_id, text=message)
+    # Если пользователь заблокирован, выкидывает exception
+    try:
+      self.bot.send_message(chat_id=chat_id, text=message)
+    except:
+      print("Couldn't send message to user")
 
   users = User.objects.all()
   for user in users:
