@@ -1,7 +1,4 @@
 from tgbot.models import User, UserToCategory, Post
-from datetime import datetime
-
-from datetime import datetime
 
 class MessageSender:
   def create(self, bot):
