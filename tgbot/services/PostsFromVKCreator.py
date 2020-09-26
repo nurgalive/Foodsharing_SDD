@@ -1,5 +1,4 @@
 from tgbot.models import User, Message, Group, Post
-from datetime import datetime
 
 from tgbot.machine_learning.get_category import get_food_category, all_cats
 from tgbot.machine_learning.get_city import get_city, get_metro_station
