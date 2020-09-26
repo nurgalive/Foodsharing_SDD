@@ -1,13 +1,13 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseBadRequest, Http404
 from django.views.decorators.csrf import csrf_exempt
-import json
-
-from utils.getCategory import get_food_category, all_cats
-from utils.getCity import get_city, get_metro_station
-from utils.getIsBooked import get_is_booked
-from utils.getIsLost import get_is_lost
+# importing env variables
+from django.conf import settings
+# models
 from .models import User, Message, Post, Group, Comment, Category, UserToCategory
+
+
+import json
 from datetime import datetime
 import vk_api
 
@@ -15,11 +15,13 @@ from .apps import TgbotConfig
 from .services import MessageAndUserFromWebhookJSON
 from .bot import Bot
 
-import os
+from utils.getCategory import get_food_category, all_cats
+from utils.getCity import get_city, get_metro_station
+from utils.getIsBooked import get_is_booked
+from utils.getIsLost import get_is_lost
 
-VK_LOGIN = os.environ['VK_LOGIN']
-VK_PASS = os.environ['VK_PASS']
-BOT_TOKEN = os.environ['BOT_TOKEN']
+# To get value from env variable
+# settings.VK_LOGIN
 
 def home(request):
   posts = Post.objects.all()
@@ -30,7 +32,7 @@ def home(request):
 def notify_users(request):
 
   #bot token
-  token = BOT_TOKEN
+  token = settings.BOT_TOKEN
   bot = TgbotConfig.registry.get_bot(token)
   
   if bot is None:
