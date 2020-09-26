@@ -33,42 +33,42 @@ class Bot:
 
   def __get_handlers__(self):
     return {
-      [BotHandlersTypes.Help]: {
+      BotHandlersTypes.Help: {
         'command': 'help',
         'handler_type': CommandHandler,
         'callback': self.help,
       },
-      [BotHandlersTypes.Start]: {
+      BotHandlersTypes.Start: {
         'command': 'start',
         'handler_type': CommandHandler,
         'callback': self.start,
       },
-      [BotHandlersTypes.Cancel]: {
+      BotHandlersTypes.Cancel: {
         'command': 'cancel',
         'handler_type': CommandHandler,
         'callback': self.cancel,
       },
-      [BotHandlersTypes.ChooseCity]: {
+      BotHandlersTypes.ChooseCity: {
         'command': 'city',
         'handler_type': CommandHandler,
         'callback': self.choose_city,
       },
-      [BotHandlersTypes.ChooseCategory]: {
+      BotHandlersTypes.ChooseCategory: {
         'command': 'category',
         'handler_type': CommandHandler,
         'callback': self.choose_category,
       },
-      [BotHandlersTypes.SetCity]: {
+      BotHandlersTypes.SetCity: {
         'command': Filters.regex(f'^({"|".join(cities)})$'),
         'handler_type': MessageHandler,
         'callback': self.set_cities,
       },
-      [BotHandlersTypes.SetCategory]: {
+      BotHandlersTypes.SetCategory: {
         'command': Filters.regex(f'^(Все|{("|").join(categories)}|{show_more_text}_\d)$'),
         'handler_type': MessageHandler,
         'callback': self.set_category,
       },
-      [BotHandlersTypes.Search]: {
+      BotHandlersTypes.Search: {
         'command': 'search',
         'handler_type': CommandHandler,
         'callback': self.search,

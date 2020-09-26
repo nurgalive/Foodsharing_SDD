@@ -6,7 +6,7 @@ class BotHandlersTypes(Enum):
   Cancel = 'cancel'
   ChooseCity = 'city'
   ChooseCategory = 'category'
-  SetCity = 'set_ity'
+  SetCity = 'set_city'
   SetCategory = 'set_category'
   Search = 'search'
 

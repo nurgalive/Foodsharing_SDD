@@ -23,6 +23,7 @@ from tgbot.machine_learning.get_category import all_cats
 # To get value from env variable - settings.VK_LOGIN
 
 def home(request):
+  print('test')
   posts = Post.objects.all()
   return render(request, 'tgbot/home.html', {'posts' : posts})
 
@@ -59,6 +60,7 @@ def from_vk_to_db(request):
 # Вебхук для обработка запросов от бота
 @csrf_exempt
 def webhook(request, token):
+  print('test')
   bot = TgbotConfig.registry.get_bot(token)
 
   if bot is None:
