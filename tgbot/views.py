@@ -93,7 +93,7 @@ def notify_users(request):
 
 # Парсинг поста из ВК, морфологический разбор и ТП
 def from_vk_to_db(request):
-  login, password = VK_LOGIN, VK_PASS
+  login, password = settings.VK_LOGIN, settings.VK_PASS
   vk_session = vk_api.VkApi(login, password)
   try:
     vk_session.auth()
