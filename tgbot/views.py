@@ -108,10 +108,10 @@ def from_vk_to_db(request):
 # Вебхук для обработка запросов от бота
 @csrf_exempt
 def webhook(request, token):
-  bot = TgbotConfig.registry.get_bot(token, url=settings.BOT_BASE_URL)
+  bot = TgbotConfig.registry.get_bot(token)
 
   if bot is None:
-    bot = Bot(token)
+    bot = Bot(token, url=settings.BOT_BASE_URL)
     TgbotConfig.registry.add_bot(token, bot)
 
   try:

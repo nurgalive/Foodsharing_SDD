@@ -29,7 +29,7 @@ show_more_text = 'Ещё'
 # Основной класс для бота для телеграма
 class Bot:
   # Инициализация бота, регистрация хендлеров
-  def __init__(self, token):
+  def __init__(self, token, url):
     self.bot = TelegramBot(token)
 
     self.dispatcher = None
