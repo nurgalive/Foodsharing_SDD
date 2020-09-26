@@ -29,9 +29,9 @@ show_more_text = 'Ещё'
 # Основной класс для бота для телеграма
 class Bot:
   # Инициализация бота, регистрация хендлеров
-  def __init__(self, token, url='edudam.herokuapp.com'):
+  def __init__(self, token):
     self.bot = TelegramBot(token)
-    
+
     self.dispatcher = None
 
     self.bot.set_webhook('{}/{}/{}/'.format(url, 'bot', token))
@@ -142,7 +142,7 @@ class Bot:
     user_db = User.objects.filter(user_id__exact=str(user.id)).get()
     category_db = Category.objects.filter(name__exact=str(category)).get()
     user_categories = UserToCategory.objects.filter(user=user_db, category=category_db)
-    
+
     try:
       if user_categories.count() == 0:
         UserToCategory(

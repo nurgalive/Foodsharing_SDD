@@ -38,7 +38,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'edudam.herokuapp.com']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'edudam.herokuapp.com', 'ngrok.io']
 
 
 # Application definition
@@ -147,3 +147,4 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 VK_LOGIN = os.environ['VK_LOGIN']
 VK_PASS = os.environ['VK_PASS']
 BOT_TOKEN = os.environ['BOT_TOKEN']
+BOT_BASE_URL = es.getenv('BOT_BASE_URL', default='edudam.herokuapp.com')

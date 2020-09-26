@@ -33,7 +33,7 @@ def notify_users(request):
   #bot token
   token = settings.BOT_TOKEN
   bot = TgbotConfig.registry.get_bot(token)
-  
+
   if bot is None:
     bot = Bot(token)
     TgbotConfig.registry.add_bot(token, bot)
@@ -48,14 +48,14 @@ def notify_users(request):
 
   users = User.objects.all()
   for user in users:
-    
+
     user_db = User.objects.filter(user_id__exact=str(user.user_id)).get()
     user_categories = UserToCategory.objects.filter(user=user_db)
     user_categories = UserToCategory.objects.filter(user=user_db)
     categories = list(map(lambda qs: qs.category.name, user_categories))
     posts = Post.objects.filter(city__exact=user_db.city, is_book=False, is_lost=False)
     filtered_posts = []
-      
+
     if 'Все' in categories:
       filtered_posts = posts
     else:
@@ -82,7 +82,7 @@ def notify_users(request):
 
       if post.address != 'Default address':
         info = info + 'Адрес: ' + post.address + '\n'
-        
+
       info = info + '\n' + 'Ссылка на пост: ' + post.link + ''
 
 
@@ -168,8 +168,8 @@ def from_vk_to_db(request):
 # Вебхук для обработка запросов от бота
 @csrf_exempt
 def webhook(request, token):
-  bot = TgbotConfig.registry.get_bot(token)
-  
+  bot = TgbotConfig.registry.get_bot(token, url=settings.BOT_BASE_URL)
+
   if bot is None:
     bot = Bot(token)
     TgbotConfig.registry.add_bot(token, bot)
@@ -189,7 +189,7 @@ def webhook(request, token):
       return HttpResponse('OK')
     else:
       raise Http404
-    
+
   else:
     return HttpResponseBadRequest('Malformed or incomplete JSON data received')
 
