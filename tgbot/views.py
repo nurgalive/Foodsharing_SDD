@@ -37,7 +37,7 @@ def notify_users(request):
   bot = TgbotConfig.registry.get_bot(token)
 
   if bot is None:
-    bot = Bot(token)
+    bot = Bot(token, url=settings.BOT_BASE_URL)
     TgbotConfig.registry.add_bot(token, bot)
 
   def send_message(self, chat_id, message):
