@@ -147,4 +147,4 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 VK_LOGIN = os.environ['VK_LOGIN']
 VK_PASS = os.environ['VK_PASS']
 BOT_TOKEN = os.environ['BOT_TOKEN']
-BOT_BASE_URL = os.getenv('BOT_BASE_URL', default='edudam.herokuapp.com')
+BOT_BASE_URL = os.environ['BOT_BASE_URL']

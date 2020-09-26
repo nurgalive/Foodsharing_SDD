@@ -1,4 +1,4 @@
-from telegram import Bot as TelegramBot, ReplyKeyboardRemove, ReplyKeyboardMarkup
+from telegram import Bot as TelegramBot, ReplyKeyboardRemove, ReplyKeyboardMarkup, Update
 from telegram.ext import Dispatcher, CommandHandler, MessageHandler, Filters, ConversationHandler
 from queue import Queue
 
@@ -25,11 +25,11 @@ class Bot:
 
   def __register_handlers__(self):
     handlers = self.__get_handlers__()
-    for command in bot_handlers:
-      command, handler_type, callback = handlers[command]
-      self.dispatcher.add_handler(handler_type(command, callback))
 
-    self.dispatcher.add_error_handler(self.error_handler)
+    for command in bot_handlers:
+      self.dispatcher.add_handler(
+        handlers[command]['handler_type'](handlers[command]['command'], handlers[command]['callback'])
+      )
 
   def __get_handlers__(self):
     return {
@@ -84,19 +84,20 @@ class Bot:
   def error_handler(self, _update, context):
     print('Error!', context.error)
 
-  def start(self):
+  def start(self, update, context):
     self.update_obj.message.reply_text(bot_texts[BotTextsTypes.Start])
 
-  def help(self):
+  def help(self, update, context):
     self.update_obj.message.reply_text(bot_texts[BotTextsTypes.Help])
 
-  def choose_city(self):
+  def choose_city(self, update, context):
     self.update_obj.message.reply_text(
       bot_texts[BotTextsTypes.ChooseCity],
       reply_markup=ReplyKeyboardMarkup([cities], one_time_keyboard=True)
     )
 
-  def choose_category(self):
+  def choose_category(self, update, context):
+    print('test')
     reply_keyboard = get_categories_keyboard(show_more_text, end=max_categories)
 
     self.update_obj.message.reply_text(
@@ -104,7 +105,7 @@ class Bot:
       reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True)
     )
 
-  def set_cities(self):
+  def set_cities(self, update, context):
     user_id = self.__get_user_field__('id')
     selected_city = self.update_obj.message.text
 
@@ -122,7 +123,7 @@ class Bot:
 
     return ConversationHandler.END
 
-  def set_category(self):
+  def set_category(self, update, context):
     category = self.update_obj.message.text
 
     if show_more_text in category:
@@ -166,7 +167,7 @@ class Bot:
         reply_markup=ReplyKeyboardRemove()
       )
 
-  def search(self):
+  def search(self, update, context):
     user = self.update_obj.message.from_user
     user_db = User.objects.filter(user_id__exact=str(user.id)).get()
     user_categories = UserToCategory.objects.filter(user=user_db)
@@ -209,3 +210,11 @@ class Bot:
       )
 
     return ConversationHandler.END
+
+  def register(self, handler):
+    handler.register(self.dispatcher)
+
+  def webhook(self, update):
+    self.update_queue.put(update)
+    self.update_obj = Update.de_json(update, self.bot)
+    self.dispatcher.process_update(self.update_obj)

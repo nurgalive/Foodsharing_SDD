@@ -60,31 +60,18 @@ def from_vk_to_db(request):
 # Вебхук для обработка запросов от бота
 @csrf_exempt
 def webhook(request, token):
-  print('test')
   bot = TgbotConfig.registry.get_bot(token)
 
   if bot is None:
     bot = Bot(token, url=settings.BOT_BASE_URL)
     TgbotConfig.registry.add_bot(token, bot)
 
-  try:
-    json_message = json.loads(request.body.decode('utf-8'))
-  except json.decoder.JSONDecodeError as err:
-    return HttpResponse(str(err))
+  json_message = json.loads(request.body.decode('utf-8'))
 
-  try:
-    result = MessageAndUserFromWebhookJSON().save(json_message)
-  except ValueError as e:
-    return HttpResponseBadRequest(str(e))
-  if result is True:
-    if bot is not None:
-      bot.webhook(json_message)
-      return HttpResponse('OK')
-    else:
-      raise Http404
+  MessageAndUserFromWebhookJSON().save(json_message)
 
-  else:
-    return HttpResponseBadRequest('Malformed or incomplete JSON data received')
+  bot.webhook(json_message)
+  return HttpResponse('OK')
 
 # Анализ постов и рендер страницы
 def analytic(request):
