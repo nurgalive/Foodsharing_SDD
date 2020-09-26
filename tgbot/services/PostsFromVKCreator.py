@@ -1,10 +1,10 @@
 from tgbot.models import User, Message, Group, Post
 from datetime import datetime
 
-from machine_learning.getCategory import get_food_category, all_cats
-from machine_learning.getCity import get_city, get_metro_station
-from tgbot.machine_learning.getIs_booked import get_is_booked
-from machine_learning.getIsLost import get_is_lost
+from tgbot.machine_learning.get_category import get_food_category, all_cats
+from tgbot.machine_learning.get_city import get_city, get_metro_station
+from tgbot.machine_learning.get_is_booked import get_is_booked
+from tgbot.machine_learning.get_is_lost import get_is_lost
 from datetime import datetime
 
 class PostsFromVKCreator:

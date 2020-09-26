@@ -17,10 +17,7 @@ from .services.MessageAndUserFromWebhookJSON import MessageAndUserFromWebhookJSO
 
 from .bot import Bot
 
-from machine_learning.getCategory import get_food_category, all_cats
-from machine_learning.getCity import get_city, get_metro_station
-from tgbot.machine_learning.getIs_booked import get_is_booked
-from machine_learning.getIsLost import get_is_lost
+from tgbot.machine_learning.get_category import all_cats
 
 # To get value from env variable - settings.VK_LOGIN
 

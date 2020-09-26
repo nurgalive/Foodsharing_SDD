@@ -10,7 +10,7 @@ from telegram import (ReplyKeyboardMarkup, ReplyKeyboardRemove)
 from telegram.ext import (Updater, CommandHandler, MessageHandler, Filters,
                           ConversationHandler)
 
-from machine_learning.getCategory import all_cats
+from tgbot.machine_learning.get_category import all_cats
 from .models import Post, User, Category, UserToCategory
 
 
