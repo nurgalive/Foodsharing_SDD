@@ -12,11 +12,11 @@ from datetime import datetime
 import vk_api
 
 from .apps import TgbotConfig
-from .services.PostsFromVKCreator import PostsFromVKCreator
-from .services.MessageAndUserFromWebhookJSON import MessageAndUserFromWebhookJSON
-from .services.MessageSender import MessageSender
+from .services.posts_from_vk_creator import PostsFromVKCreator
+from .services.message_and_user_from_webhook_json import MessageAndUserFromWebhookJSON
+from .services.message_sender import MessageSender
 
-from .bot import Bot
+from .bot_index import Bot
 
 from tgbot.machine_learning.get_category import all_cats
 
