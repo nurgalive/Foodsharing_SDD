@@ -21,7 +21,7 @@ class Bot:
     self.dispatcher = Dispatcher(self.bot, self.update_queue, workers=4, use_context=True)
     self.update_obj = None
 
-    self.__register_handlers__(self)
+    self.__register_handlers__()
 
   def __register_handlers__(self):
     handlers = self.__get_handlers__()
@@ -105,7 +105,7 @@ class Bot:
     )
 
   def set_cities(self):
-    user_id = self.__get_user_field__(self, 'id')
+    user_id = self.__get_user_field__('id')
     selected_city = self.update_obj.message.text
 
     update_user_city(user_id, selected_city)
@@ -113,7 +113,7 @@ class Bot:
     self.update_obj.message.reply_text(f'Твой город: {selected_city}\n\n')
 
   def cancel(self, update, context):
-    user_first_name = self.__get_user_field__(self, 'first_name')
+    user_first_name = self.__get_user_field__('first_name')
 
     self.update_obj.message.reply_text(
       f'До встречи, {user_first_name}',
