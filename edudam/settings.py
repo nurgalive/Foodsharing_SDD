@@ -142,3 +142,8 @@ DATABASES['default'].update(db_from_env)
 # Simplified static file serving.
 # https://warehouse.python.org/project/whitenoise/
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+# Environmental variables
+VK_LOGIN = os.environ['VK_LOGIN']
+VK_PASS = os.environ['VK_PASS']
+BOT_TOKEN = os.environ['BOT_TOKEN']
