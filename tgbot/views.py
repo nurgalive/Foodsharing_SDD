@@ -43,7 +43,8 @@ def notify_users(request):
     # Если пользователь заблокирован, выкидывает exception
     try:
       self.bot.send_message(chat_id=chat_id, text=message)
-    except:
+    except SendMessageError as error:
+      print(error)
       print("Couldn't send message to user")
 
   users = User.objects.all()
