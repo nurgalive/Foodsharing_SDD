@@ -41,7 +41,8 @@ def notify_users(request):
     # Если пользователь заблокирован, выкидывает exception
     try:
       self.bot.send_message(chat_id=chat_id, text=message)
-    except:
+    except SendMessageError as error:
+      print(error)
       print("Couldn't send message to user")
 
   users = User.objects.all()
@@ -102,7 +103,11 @@ def from_vk_to_db(request):
   groups = Group.objects.all()
   for group in groups:
     domain = group.link[15:len(group.link)]
-    posts = vk.wall.get(domain=domain, count=100)
+    try:
+      posts = vk.wall.get(domain=domain, count=100)
+    except VkAPiError as error_msg:
+      print(error_msg)
+      print("Could not get data from VK API")
     for x in range(0,100):
       if posts['items'][x] is None:
         continue
