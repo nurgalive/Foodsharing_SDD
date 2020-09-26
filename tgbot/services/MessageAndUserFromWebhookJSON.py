@@ -1,4 +1,5 @@
-from tgbot.models import User, Message, Group, Post
+from tgbot.models import User, Message
+
 from datetime import datetime
 
 # Класс для сохранения информации о юзере и сообщении в БД

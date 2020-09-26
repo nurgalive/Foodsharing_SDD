@@ -18,10 +18,7 @@ from .services.MessageSender import MessageSender
 
 from .bot import Bot
 
-from utils.getCategory import get_food_category, all_cats
-from utils.getCity import get_city, get_metro_station
-from utils.getIsBooked import get_is_booked
-from utils.getIsLost import get_is_lost
+from tgbot.machine_learning.get_category import all_cats
 
 # To get value from env variable - settings.VK_LOGIN
 
