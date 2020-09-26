@@ -1,11 +1,8 @@
 from tgbot.models import User, Message, Group, Post
-from datetime import datetime
-
 from utils.getCategory import get_food_category, all_cats
 from utils.getCity import get_city, get_metro_station
 from utils.getIsBooked import get_is_booked
 from utils.getIsLost import get_is_lost
-from datetime import datetime
 
 class PostsFromVKCreator:
   def create(self, vk):
