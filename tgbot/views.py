@@ -20,8 +20,7 @@ from utils.getCity import get_city, get_metro_station
 from utils.getIsBooked import get_is_booked
 from utils.getIsLost import get_is_lost
 
-# To get value from env variable
-# settings.VK_LOGIN
+# To get value from env variable - settings.VK_LOGIN
 
 def home(request):
   posts = Post.objects.all()
