@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_q'
 ]
 
 MIDDLEWARE = [
@@ -126,6 +127,13 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
+
+# Configure your Q cluster
+# More details https://django-q.readthedocs.io/en/latest/configure.html
+Q_CLUSTER = {
+    "name": "edudam",
+    "orm": "default",  # Use Django's ORM + database for broker
+}
 
 
 # Static files (CSS, JavaScript, Images)
