@@ -1,4 +1,5 @@
 import vk_api
+
 from .services.posts_from_vk_creator import PostsFromVKCreator
 from django.conf import settings
 
@@ -12,3 +13,5 @@ def fetch_posts_from_vk():
 
   vk = vk_session.get_api()
   PostsFromVKCreator().create(vk)
+
+  return True
