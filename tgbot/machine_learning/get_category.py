@@ -60,19 +60,26 @@ def get_food_category(text):
           continue
 
         if word in processed_text:
+          # если категории еще нет в словаре, то создать новую категорию
           if category not in detected_cats:
             detected_cats[category] = 1
           else:
+            # если категория уже есть, то увелить её частоту на один
             detected_cats[category] = 1 + detected_cats[category]
           break
 
   if len(detected_cats) == 0:
     return 'unknown'
 
+  sorted(detected_cats, key=detected_cats.get, reverse=True)
+
   # берем категорию, продукты из которой чаще всего встречались в тексте
   category_with_max_match = max(detected_cats, key=detected_cats.get)
+
+  # сколько раз встретилась максимальная категория
   category_with_max_match_count = detected_cats[category_with_max_match]
 
+  # Костыль! Если готовые блюда на первом месте, то сделать их равными нулю
   if (category_with_max_match == 'готовые блюда'):
     detected_cats[category_with_max_match] = 0
   else:

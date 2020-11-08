@@ -18,14 +18,14 @@ class Category(models.Model):
     return f'{self.name}'
 
 class UserToCategory(models.Model):
-  user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="group", default=0)
-  category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="group", default=0)
+  user      = models.ForeignKey(User, on_delete=models.CASCADE, related_name="group", default=0)
+  category  = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="group", default=0)
 
 class Message(models.Model):
   update_id = models.IntegerField(unique=True)
-  text = models.TextField(max_length=4096)
-  date = models.DateTimeField(default=timezone.now)
-  sender = models.ForeignKey(User, on_delete=models.CASCADE)
+  text      = models.TextField(max_length=4096)
+  date      = models.DateTimeField(default=timezone.now)
+  sender    = models.ForeignKey(User, on_delete=models.CASCADE)
 
   def __str__(self):
     return f'{self.text}'
@@ -52,7 +52,10 @@ class Post(models.Model):
   is_book     = models.BooleanField(default=False)
   is_lost     = models.BooleanField(default=False)
 
+class PostToCategory(models.Model):
+  post      = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="post_in_cat", default=0)
+  category  = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="group_in_cat", default=0)
 
 class Comment(models.Model):
-  post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="group", default=0)
+  post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="post", default=0)
   text = models.TextField(max_length=4096)
