@@ -16,6 +16,10 @@ class PostsFromVKCreator:
         if posts['items'][x] is None:
           continue
 
+        # check if the text is not empty
+        if len(posts['items'][x]['text']) < 10:
+          continue
+
         text = posts['items'][x]['text']
         date = posts['items'][x]['date']
         post_id = posts['items'][x]['id']
