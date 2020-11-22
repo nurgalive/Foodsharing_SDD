@@ -1,7 +1,6 @@
-from tgbot.models import User, Message, Group, Post
-from datetime import datetime
+from tgbot.models import Group, Post
 
-from tgbot.machine_learning.get_category import get_food_category, all_cats
+from tgbot.machine_learning.get_category import get_food_category
 from tgbot.machine_learning.get_city import get_city, get_metro_station
 from tgbot.machine_learning.get_is_booked import get_is_booked
 from tgbot.machine_learning.get_is_lost import get_is_lost
@@ -12,8 +11,8 @@ class PostsFromVKCreator:
     groups = Group.objects.all()
     for group in groups:
       domain = group.link[15:len(group.link)]
-      posts = vk.wall.get(domain=domain, count=100)
-      for x in range(0,100):
+      posts = vk.wall.get(domain=domain, count=15)
+      for x in range(0,15):
         if posts['items'][x] is None:
           continue
 
@@ -34,7 +33,7 @@ class PostsFromVKCreator:
           group = Group.objects.get(group_id=group_id)
 
           group_id = group_id * -1
-          comments = vk.wall.getComments(owner_id=group_id, post_id=post_id, count=100, sort='asc')
+          comments = vk.wall.getComments(owner_id=group_id, post_id=post_id, count=15, sort='asc')
 
           count = comments['current_level_count']
           big_comment = ""

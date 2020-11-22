@@ -50,8 +50,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+  
     'tgbot.apps.TgbotConfig',
     'django_extensions',
+    'django_q'
+
 ]
 
 MIDDLEWARE = [
@@ -128,6 +131,13 @@ USE_L10N = True
 
 USE_TZ = True
 
+# Configure your Q cluster
+# More details https://django-q.readthedocs.io/en/latest/configure.html
+Q_CLUSTER = {
+    "name": "edudam",
+    "orm": "default",  # Use Django's ORM + database for broker
+}
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
@@ -137,7 +147,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 django_heroku.settings(locals())
 
-db_from_env = dj_database_url.config(conn_max_age=500)
+db_from_env = dj_database_url.config(conn_max_age=1500)
 DATABASES['default'].update(db_from_env)
 
 # Simplified static file serving.
@@ -148,4 +158,5 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 VK_LOGIN = os.environ['VK_LOGIN']
 VK_PASS = os.environ['VK_PASS']
 BOT_TOKEN = os.environ['BOT_TOKEN']
-BOT_BASE_URL = os.getenv('BOT_BASE_URL')
+BOT_BASE_URL = os.environ['BOT_BASE_URL']
+
