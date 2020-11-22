@@ -1,10 +1,10 @@
-from telegram import Bot as TelegramBot, ReplyKeyboardRemove, ReplyKeyboardMarkup, Update
-from telegram.ext import Dispatcher, CommandHandler, MessageHandler, Filters, ConversationHandler
+from telegram import Bot as TelegramBot, ReplyKeyboardRemove, ReplyKeyboardMarkup, Update, InlineKeyboardButton, InlineKeyboardMarkup
+from telegram.ext import Dispatcher, CommandHandler, MessageHandler, Filters, ConversationHandler, CallbackQueryHandler
 from queue import Queue
 
 from tgbot.bot.constants import categories, max_categories
 from tgbot.bot.utils import get_categories_keyboard, get_more_categories_keyboard
-from tgbot.bot.handlers import BotHandlersTypes, bot_handlers
+from tgbot.bot.handlers import BotHandlersTypes, bot_handlers, CallbackDatas, bot_callback_handlers
 from tgbot.bot.texts import BotTextsTypes, bot_texts, show_more_text, cities
 from tgbot.services.user import update_user_city
 from .services.posts import format_post, get_posts_for_user
@@ -28,10 +28,18 @@ class Bot:
 
   def __register_handlers__(self):
     handlers = self.__get_handlers__()
+    callback_handlers = self.__get_callback_handlers()
 
     for command in bot_handlers:
+      handler = handlers[command]
       self.dispatcher.add_handler(
-        handlers[command]['handler_type'](handlers[command]['command'], handlers[command]['callback'])
+        handler['handler_type'](handler['command'], handler['callback'])
+      )
+
+    for command in callback_handlers:
+      callback_handler = callback_handlers[command]
+      self.dispatcher.add_handler(
+        callback_handler['handler_type'](callback_handler['callback'], pattern=callback_handler['pattern'])
       )
 
   def __get_handlers__(self):
@@ -75,7 +83,21 @@ class Bot:
         'command': 'search',
         'handler_type': CommandHandler,
         'callback': self.search,
+      },
+      BotHandlersTypes.Dev: {
+        'command': 'dev',
+        'handler_type': CommandHandler,
+        'callback': self.dev,
       }
+    }
+
+  def __get_callback_handlers(self):
+    return {
+      CallbackDatas.Dev: {
+        'handler_type': CallbackQueryHandler,
+        'pattern': CallbackDatas.Dev,
+        'callback': self.dev_callback_handler
+      },
     }
 
   def __get_user_field__(self, field_name = None):
@@ -168,6 +190,21 @@ class Bot:
       self.update_obj.message.reply_text(format_post(post))
 
     return ConversationHandler.END
+
+  def dev(self, update, context):
+    keyboard = [
+      [InlineKeyboardButton("dev1", callback_data='dev'), InlineKeyboardButton("dev2", callback_data='dev')],
+      [InlineKeyboardButton("dev3", callback_data='dev'), InlineKeyboardButton("dev4", callback_data='dev')]
+    ]
+    reply_markup = InlineKeyboardMarkup(keyboard)
+
+    self.update_obj.message.reply_text('please select the judge or select all for showing all',reply_markup=reply_markup)
+
+  def dev_callback_handler(self, update, context):
+    callback_data = self.update_obj.callback_query.message.text
+    chat_id = self.update_obj.callback_query.message.chat.id
+    message_id = self.update_obj.callback_query.message.message_id
+    self.bot.edit_message_text(callback_data, chat_id=chat_id, message_id=message_id)
 
   def register(self, handler):
     handler.register(self.dispatcher)

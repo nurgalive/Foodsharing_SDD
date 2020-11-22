@@ -9,6 +9,7 @@ class BotHandlersTypes(Enum):
   SetCity = 'set_city'
   SetCategory = 'set_category'
   Search = 'search'
+  Dev = 'dev'
 
 
 bot_handlers = [
@@ -20,4 +21,15 @@ bot_handlers = [
   BotHandlersTypes.SetCity,
   BotHandlersTypes.SetCategory,
   BotHandlersTypes.Search,
+  BotHandlersTypes.Dev,
 ]
+
+
+
+class CallbackDatas(Enum):
+  Dev = 'dev'
+
+bot_callback_handlers = [
+  CallbackDatas.Dev
+]
+
