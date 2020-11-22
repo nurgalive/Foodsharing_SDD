@@ -1,3 +1,3 @@
 release: python manage.py migrate
 worker: python manage.py qcluster
-web: gunicorn edudam.wsgi --log-file -
+web: gunicorn edudam.wsgi --timeout 120 --log-file -
