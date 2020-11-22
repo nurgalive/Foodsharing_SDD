@@ -134,20 +134,29 @@ USE_TZ = True
 
 # Configure your Q cluster
 # More details https://django-q.readthedocs.io/en/latest/configure.html
-Q_CLUSTER = {
-    "name": "edudam",
-    'workers': 2,
-    'recycle': 50,
-    'timeout': 120,
-    'save_limit': 250,
-    'queue_limit': 4,
-    'redis': {
-        'host': 'ec2-34-242-157-186.eu-west-1.compute.amazonaws.com',
-        'port': 9509,
-        'password': REDIS_PASSWORD,
-        'db': 0,
+
+Q_CLUSTER = None
+
+if DEBUG == True:
+    Q_CLUSTER = {
+        "name": "edudam",
+        "orm": "default",  # Use Django's ORM + database for broker	    "orm": "default",  # Use Django's ORM + database for broker
+	}
+else:
+    Q_CLUSTER = {
+        "name": "edudam",
+        'workers': 2,
+        'recycle': 50,
+        'timeout': 120,
+        'save_limit': 250,
+        'queue_limit': 4,
+        'redis': {
+            'host': 'ec2-34-242-157-186.eu-west-1.compute.amazonaws.com',
+            'port': 9509,
+            'password': REDIS_PASSWORD,
+            'db': 0,
+        }
     }
-}
 
 
 # Static files (CSS, JavaScript, Images)
