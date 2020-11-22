@@ -5,6 +5,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 # models
 from .models import User, Message, Post, Group, Comment, Category, UserToCategory
+from django.db.models.functions import Length
 
 
 import json
@@ -117,6 +118,6 @@ def upload_cats_to_db(request):
       result.save()
 
   update_category()
+  Post.objects.annotate(text_len=Length('text')).filter(text_len__lt=10).delete()
   
-
   return redirect('home')
