@@ -95,7 +95,7 @@ class Bot:
     return {
       CallbackDatas.Dev: {
         'handler_type': CallbackQueryHandler,
-        'pattern': CallbackDatas.Dev,
+        'pattern': 'dev',
         'callback': self.dev_callback_handler
       },
     }
