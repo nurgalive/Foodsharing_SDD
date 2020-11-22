@@ -135,6 +135,12 @@ USE_TZ = True
 # More details https://django-q.readthedocs.io/en/latest/configure.html
 Q_CLUSTER = {
     "name": "edudam",
+    'workers': 8,
+    'recycle': 500,
+    'timeout': 120,
+    'compress': True,
+    'save_limit': 250,
+    'queue_limit': 500,
     "orm": "default",  # Use Django's ORM + database for broker
 }
 
