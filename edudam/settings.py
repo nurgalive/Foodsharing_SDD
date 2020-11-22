@@ -24,6 +24,7 @@ else:
         DEBUG = False
 
 SECRET_KEY = os.environ['SECRET_KEY']
+REDIS_PASSWORD = os.environ['REDIS_PASSWORD']
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -137,10 +138,15 @@ Q_CLUSTER = {
     "name": "edudam",
     'workers': 2,
     'recycle': 50,
-    'timeout': 1500,
+    'timeout': 120,
     'save_limit': 250,
     'queue_limit': 4,
-    "orm": "default",  # Use Django's ORM + database for broker
+    'redis': {
+        'host': 'ec2-34-242-157-186.eu-west-1.compute.amazonaws.com',
+        'port': 9509,
+        'password': REDIS_PASSWORD,
+        'db': 0,
+    }
 }
 
 
