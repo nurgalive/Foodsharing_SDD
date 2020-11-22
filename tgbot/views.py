@@ -18,7 +18,7 @@ from .services.message_sender import MessageSender
 
 from .bot_index import Bot
 
-from tgbot.machine_learning.get_category import all_cats
+from tgbot.machine_learning.get_category import all_cats, update_category
 
 # To get value from env variable - settings.VK_LOGIN
 
@@ -115,5 +115,8 @@ def upload_cats_to_db(request):
     if Category.objects.filter(name__exact=category).count() == 0:
       result = Category.objects.create(name=category)
       result.save()
+
+  update_category()
+  
 
   return redirect('home')

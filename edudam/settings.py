@@ -44,14 +44,17 @@ ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'edudam.herokuapp.com', 'ngrok.io']
 # Application definition
 
 INSTALLED_APPS = [
-    'tgbot.apps.TgbotConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+  
+    'tgbot.apps.TgbotConfig',
+    'django_extensions',
     'django_q'
+
 ]
 
 MIDDLEWARE = [
@@ -156,3 +159,4 @@ VK_LOGIN = os.environ['VK_LOGIN']
 VK_PASS = os.environ['VK_PASS']
 BOT_TOKEN = os.environ['BOT_TOKEN']
 BOT_BASE_URL = os.environ['BOT_BASE_URL']
+
