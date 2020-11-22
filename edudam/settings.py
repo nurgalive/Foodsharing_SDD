@@ -137,7 +137,7 @@ Q_CLUSTER = {
     "name": "edudam",
     'workers': 2,
     'recycle': 50,
-    'timeout': 500,
+    'timeout': 1500,
     'save_limit': 250,
     'queue_limit': 4,
     "orm": "default",  # Use Django's ORM + database for broker
