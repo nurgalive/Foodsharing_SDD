@@ -3,14 +3,17 @@ from telegram.ext import Dispatcher, CommandHandler, MessageHandler, Filters, Co
 from queue import Queue
 
 from tgbot.bot.constants import categories, max_categories
-from tgbot.bot.utils import get_categories_keyboard
+from tgbot.bot.utils import get_categories_keyboard, get_more_categories_keyboard
 from tgbot.bot.handlers import BotHandlersTypes, bot_handlers
 from tgbot.bot.texts import BotTextsTypes, bot_texts, show_more_text, cities
 from tgbot.services.user import update_user_city
-from .models import Post, User, Category, UserToCategory
+from .services.posts import format_post, get_posts_for_user
+from .services.user_categories import update_user_categories
 
 
 # Основной класс для бота для телеграма
+
+
 class Bot:
   def __init__(self, token, url):
     self.bot = TelegramBot(token)
@@ -97,7 +100,6 @@ class Bot:
     )
 
   def choose_category(self, update, context):
-    print('test')
     reply_keyboard = get_categories_keyboard(show_more_text, end=max_categories)
 
     self.update_obj.message.reply_text(
@@ -125,63 +127,37 @@ class Bot:
 
   def set_category(self, update, context):
     category = self.update_obj.message.text
+    user = self.update_obj.message.from_user
+    is_show_more = show_more_text in category
 
-    if show_more_text in category:
+    if is_show_more:
       _, parsed_offset = category.split('_')
-      offset = int(parsed_offset)
-      start = offset * max_categories
-      end = offset * max_categories + max_categories
-
-      reply_keyboard = [['Все', *categories[start:end], f'{show_more_text}_{offset + 1}']]
-
-      if len(categories) < end:
-        reply_keyboard = [['Все', *categories[start:end]]]
+      reply_keyboard = get_more_categories_keyboard(int(parsed_offset))
 
       self.update_obj.message.reply_text(
         'Выбери интересующие категории продуктов ',
         reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True)
       )
-
-    user = self.update_obj.message.from_user
-    user_db = User.objects.filter(user_id__exact=str(user.id)).get()
-    category_db = Category.objects.filter(name__exact=str(category)).get()
-    user_categories = UserToCategory.objects.filter(user=user_db, category=category_db)
-
-    try:
-      if user_categories.count() == 0:
-        UserToCategory(
-          user=user_db,
-          category=category_db
-        ).save()
-    except (KeyError, ValueError):
-      return self.update_obj.message.reply_text('Ошибка при добавлении категории')
-
-    if user_categories.count() == 0:
-      self.update_obj.message.reply_text(
-        'Мы отфильтруем по выбранным категориям: ' + category,
-        reply_markup=ReplyKeyboardRemove()
-      )
     else:
-      self.update_obj.message.reply_text(
-        f'Категория "{category}" уже добавлена',
-        reply_markup=ReplyKeyboardRemove()
-      )
+      try:
+        is_success = update_user_categories(user.id, category)
+
+        if is_success:
+          self.update_obj.message.reply_text(
+            'Мы отфильтруем по выбранным категориям: ' + category,
+            reply_markup=ReplyKeyboardRemove()
+          )
+        else:
+          self.update_obj.message.reply_text(
+            f'Категория "{category}" уже добавлена',
+            reply_markup=ReplyKeyboardRemove()
+          )
+      except (KeyError, ValueError):
+        return self.update_obj.message.reply_text('Ошибка при добавлении категории')
 
   def search(self, update, context):
     user = self.update_obj.message.from_user
-    user_db = User.objects.filter(user_id__exact=str(user.id)).get()
-    user_categories = UserToCategory.objects.filter(user=user_db)
-
-    categories = list(map(lambda qs: qs.category.name, user_categories))
-    posts = Post.objects.filter(city__exact=user_db.city, is_book=False, is_lost=False)
-    filtered_posts = []
-
-    if 'Все' in categories:
-      filtered_posts = posts
-    else:
-      for post in posts:
-        if post.category in categories:
-          filtered_posts.append(post)
+    filtered_posts = get_posts_for_user(user.id)
 
     if len(filtered_posts) == 0:
       self.update_obj.message.reply_text('Ни одного поста не найдено')
@@ -189,25 +165,7 @@ class Bot:
       return ConversationHandler.END
 
     for post in filtered_posts:
-      info = ''
-      if post.city is not None:
-        info = info + '\nГород: ' + post.city + '\n'
-      else:
-        continue
-
-      if post.category != 'unknown':
-        info = info + 'Категория: ' + post.category + '\n'
-
-      if post.metro != 'unknown':
-        info = info + 'Метро: ' + post.metro + '\n'
-
-      if post.address != 'Default address':
-        info = info + 'Адрес: ' + post.address + '\n'
-
-      self.update_obj.message.reply_text(
-        '' + info + '\n'
-                    'Ссылка на пост: ' + post.link + ''
-      )
+      self.update_obj.message.reply_text(format_post(post))
 
     return ConversationHandler.END
 
